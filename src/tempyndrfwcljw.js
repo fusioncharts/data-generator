@@ -57,10 +57,7 @@ class NumberGenerator {
         this.trend.b = b;
       else
         if(value === 'linear' || value === 'log')
-          if(this.range.lowerBound < this.range.upperBound)
-            this.trend.b = Math.floor(Math.random() * this.range.upperBound - this.range.lowerBound) + this.range.lowerBound;
-          else
-            this.trend.b = Math.floor(Math.random() * this.range.lowerBound - this.range.upperBound) + this.range.upperBound;
+          this.trend.b = Math.floor(Math.random() * (this.range.upperBound + this.range.lowerBound)/2) + this.range.lowerBound;
       this.trend.property = value;
     }
 
@@ -95,21 +92,20 @@ class NumberGenerator {
    * @memberof NumberGenerator
    */
   generate(type, n) {
-    let spacing = -1, i = 0;
+    let spacing = -1,
+      i = 0;
     if (type === 'integer') {
       //Adds n unique random numbers to the data this.array
       if(this.trend.property === 'random'){
         while(i < n){
-          let num = Math.floor((Math.random() * (this.range.upperBound-this.range.lowerBound)) + this.range.lowerBound);
+          let num = Math.floor((Math.random() * this.range.upperBound) + this.range.lowerBound);
           if(this.arr.indexOf(num) > -1)
             continue;
-          else{
+          else
             if(this.chartType === 'scatter')
-              this.arr.push([Math.floor((Math.random() * (this.range.upperBound-this.range.lowerBound)) + this.range.lowerBound), num]);
+              this.arr.push([i, num]);
             else
               this.arr.push(num);
-            i++;
-          }
         } 
       }
 
@@ -121,7 +117,7 @@ class NumberGenerator {
           if(this.chartType === 'scatter'){
             //Generate random numbers on the x axis within the range
             while(i < n){
-              let num = Math.floor((Math.random() * (this.range.upperBound-this.range.lowerBound)) + this.range.lowerBound);
+              let num = Math.floor((Math.random() * this.range.upperBound) + this.range.lowerBound);
               if(this.arr.indexOf(num) > -1)
                 continue;
               else{
@@ -136,36 +132,25 @@ class NumberGenerator {
             for(i=0;i<n;i++)
               x.push(i);
 
-          //Defines Slope
-          this.trend.a = (this.range.upperBound - this.range.lowerBound)/(x[n-1] - x[0]);
-          //Defines Intercept
-          this.trend.b = (this.range.lowerBound - (this.trend.a * x[0]))
-
+          //Formula to find slope such that Y axis values remain within given range
+          if(this.range.lowerBound < this.range.upperBound)
+            this.trend.a = Math.floor((this.range.upperBound - this.trend.b)/x[n-1]);
+          else
+            this.trend.a = -Math.floor((this.range.upperBound - this.trend.b)/x[n-1]);
           //generate the y axis values
           for(let i=0;i<n;i++)
             if(this.chartType === 'scatter')
-              this.arr.push([x[i], Math.ceil((this.trend.a * x[i])+this.trend.b)]);
+              this.arr.push([x[i], (this.trend.a * x[i]) + this.trend.b])
             else
-              this.arr.push(Math.ceil((this.trend.a * x[i])+this.trend.b));
+              this.arr.push((this.trend.a * x[i]) + this.trend.b);
       }
     }
   }
 }
 
-//1. Linear negative range issue.
-//2. Add growthRate.
-let X = new NumberGenerator("scatter");
 
-X.modifier('range', '-20, -100');
-X.modifier('trend', 'linear');
-X.generate('integer', 10);
-
-X.modifier('range', '100, 200');
+let X = new NumberGenerator("column");
+X.modifier('range', '10, 100');
 X.modifier('trend', 'random');
-X.generate('integer', 5);
-
-X.modifier('range', '300, 200');
-X.modifier('trend', 'linear');
-X.generate('integer', 5);
-
+X.generate('integer', 10);
 console.log(X.arr);
