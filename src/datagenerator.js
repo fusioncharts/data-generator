@@ -61,10 +61,10 @@ class DataGenerator {
     parseData(arr) {
         let i, tempJSONdata = {};
 
-        for (i = 0; i < arr.length; i++) {
+        for (i = 0; i < arr[0].length; i++) {
             tempJSONdata = {};
-            tempJSONdata['label'] = 'label';
-            tempJSONdata['value'] = arr[i] + '';
+            tempJSONdata['label'] = arr[1][i];
+            tempJSONdata['value'] = arr[0][i] + '';
             this.finalJSONAr.push(tempJSONdata);
         }
 
@@ -144,7 +144,7 @@ class DataGenerator {
     }
 
     addArray(arr, append) {
-        // console.log(arr);
+        console.log(arr);
         if (arr === undefined || arr.length === 0) {
             return 'Array cannot be undefined or empty';
         }
@@ -174,8 +174,8 @@ class DataGenerator {
     modifyNumber(property, value) {
         numberGeneratorObj.modifier(property, value);
     }
-    generateNumber(numberType, total, append) {
-        this.addArray(numberGeneratorObj.generate(numberType, total), append);
+    generateNumber(numberType, total, label, append) {
+        this.addArray(numberGeneratorObj.generate(numberType, total, label), append);
     }
     getJSON() {
         if (this.chartType === 0) {
@@ -199,14 +199,14 @@ const datageneratorObj = new DataGenerator('column2d');
 // Write your code here
 
 
-// datageneratorObj.modifyNumber('range','30, 200');
-// datageneratorObj.modifyNumber('trend','linear');
-// datageneratorObj.generateNumber('integer',5,false);
+datageneratorObj.modifyNumber('range','30, 200');
+datageneratorObj.modifyNumber('trend','linear');
+datageneratorObj.generateNumber('integer',5,'month_short',false);
 
-// datageneratorObj.getJSON();
+datageneratorObj.getJSON();
 
-// datageneratorObj.modifyNumber('range','300, 500');
-// datageneratorObj.modifyNumber('trend','random');
-// datageneratorObj.generateNumber('integer',5,true);
+datageneratorObj.modifyNumber('range','300, 500');
+datageneratorObj.modifyNumber('trend','random');
+datageneratorObj.generateNumber('integer',5,'month_short',true);
 
-// datageneratorObj.getJSON();
+datageneratorObj.getJSON();
