@@ -14,7 +14,7 @@ class NumberGenerator {
    */
   constructor(chartType) {
     this.chartType = chartType;
-    
+
     // Values possible - random, constant, linear, exponential, logarithmic, prime
     this.trend = {
       property: 'random',
@@ -44,11 +44,11 @@ class NumberGenerator {
       this.trend.property = value;
 
     else if (property === 'range') {
-      if(value.length > 1){
+      if (value.length > 1) {
         let val = value.split(',');
-        if(val[0].length > 0)
+        if (val[0].length > 0)
           this.range.lowerBound = Number(val[0].trim());
-        if(val[1].length > 0)
+        if (val[1].length > 0)
           this.range.upperBound = Number(val[1].trim());
       }
     }
@@ -62,37 +62,30 @@ class NumberGenerator {
    * @memberof NumberGenerator
    */
   generate(type, n, label) {
-    let spacing = -1, i = 0;
-    if (type === 'integer'){
+    let spacing = -1,
+      i = 0;
+    if (type === 'integer') {
       //Adds n unique random numbers to the data this.array
-      if(this.trend.property === 'random'){
-        if(label){
+      if (this.trend.property === 'random') {
+        if (label) {
           let sg = new StringGenerator(n, label);
           return [this.random(n), sg.generate()];
-        }
-        else
+        } else
           return this.random(n);
-      }
-
-      else if(this.trend.property === 'linear'){
-        if(label){
+      } else if (this.trend.property === 'linear') {
+        if (label) {
           let sg = new StringGenerator(n, label);
           return [this.linear(n), sg.generate()];
-        }
-        else
+        } else
           return this.linear(n);
-      }
-
-      else if(this.trend.property === 'exp'){
-        if(label){
+      } else if (this.trend.property === 'exp') {
+        if (label) {
           let sg = new StringGenerator(n, label);
           return [this.exponential(n), sg.generate()];
-        }
-        else
+        } else
           return this.exponential(n);
       }
-    }
-    else if(label){
+    } else if (label) {
       let sg = new StringGenerator(n, label);
       return sg.generate();
     }
@@ -104,15 +97,17 @@ class NumberGenerator {
    * @param {any} n 
    * @memberof NumberGenerator
    */
-  random(n){
-    let spacing = -1, i = 0, arr = [];
-    while(i < n){
-      let num = Math.floor((Math.random() * (this.range.upperBound-this.range.lowerBound)) + this.range.lowerBound);
-      if(arr.indexOf(num) > -1)
+  random(n) {
+    let spacing = -1,
+      i = 0,
+      arr = [];
+    while (i < n) {
+      let num = Math.floor((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound);
+      if (arr.indexOf(num) > -1)
         continue;
-      else{
-        if(this.chartType === 'scatter')
-          arr.push([Math.floor((Math.random() * (this.range.upperBound-this.range.lowerBound)) + this.range.lowerBound), num]);
+      else {
+        if (this.chartType === 'scatter')
+          arr.push([Math.floor((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound), num]);
         else
           arr.push(num);
         i++;
@@ -127,25 +122,25 @@ class NumberGenerator {
    * @param {any} n 
    * @memberof NumberGenerator
    */
-  linear(n){
+  linear(n) {
     let arr = [];
-    if(this.prevTrend !== this.trend.property)
+    if (this.prevTrend !== this.trend.property)
       this.counter = 0;
 
     let x = this.generateX(n);
 
     //Defines Slope
-    this.trend.a = (this.range.upperBound - this.range.lowerBound)/(x[n-1] - x[0]);
+    this.trend.a = (this.range.upperBound - this.range.lowerBound) / (x[n - 1] - x[0]);
     //Defines Intercept
     this.trend.b = (this.range.lowerBound - (this.trend.a * x[0]))
 
     //generate the y axis values
-    for(let i=0;i<n;i++)
-      if(this.chartType === 'scatter')
-        arr.push([x[i], Math.ceil((this.trend.a * x[i])+this.trend.b)]);
+    for (let i = 0; i < n; i++)
+      if (this.chartType === 'scatter')
+        arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b)]);
       else
-        arr.push(Math.ceil((this.trend.a * x[i])+this.trend.b));
-    
+        arr.push(Math.ceil((this.trend.a * x[i]) + this.trend.b));
+
     return arr;
   }
 
@@ -155,21 +150,21 @@ class NumberGenerator {
    * @param {any} n 
    * @memberof NumberGenerator
    */
-  exponential(n){
+  exponential(n) {
     let arr = [];
-    if(this.prevTrend !== this.trend.property)
+    if (this.prevTrend !== this.trend.property)
       this.counter = 0;
 
     let x = this.generateX(n);
 
     //Defines rate of growth in exponential equation
-    this.trend.b = Math.log(this.range.upperBound/this.range.lowerBound)/(x[n-1]-x[0]);
+    this.trend.b = Math.log(this.range.upperBound / this.range.lowerBound) / (x[n - 1] - x[0]);
     //Define the constant in the exponential equation
     this.trend.a = this.range.lowerBound / Math.exp(this.trend.b * x[0]);
 
     //generate the y axis values
-    for(let i=0;i<n;i++){
-      if(this.chartType === 'scatter')
+    for (let i = 0; i < n; i++) {
+      if (this.chartType === 'scatter')
         arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i]))]);
       else
         arr.push(Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])));
@@ -179,26 +174,29 @@ class NumberGenerator {
   }
 
   /**
-   * 
+   * Generates Random numbers on the X axis within a given range
    * 
    * @param {any} n 
    * @returns 
    * @memberof NumberGenerator
    */
-  generateX(n){
-    let x = [], i=0;
+  generateX(n) {
+    let x = [],
+      i = 0;
     //Generate random numbers on the x axis within the range
-    while(i < n){
-      let num = Math.floor((Math.random() * (this.range.upperBound-this.range.lowerBound)) + this.range.lowerBound);
-      if(x.indexOf(num) > -1)
+    while (i < n) {
+      let num = Math.floor((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound);
+      if (x.indexOf(num) > -1)
         continue;
-      else{
+      else {
         x.push(num);
         i++;
       }
     }
     //Sort the x axis numbers numerically. Helps in finding the maximum value of x for both positive and negative range
-    x.sort(function(a, b){return a-b});
+    x.sort(function (a, b) {
+      return a - b
+    });
 
     return x;
   }
@@ -221,3 +219,8 @@ X.modifier('trend', 'linear');
 let d = X.generate('integer', 5, 'generic1');
 console.log(d[0]);
 console.log(d[1]);
+
+X.modifier('range', '300, 100');
+X.modifier('trend', 'linear');
+let e = X.generate('none', 5, 'generic1');
+console.log(e);
