@@ -183,10 +183,11 @@ class NumberGenerator {
   }
 }
 
+module.exports = NumberGenerator;
 
 //1. TODO: Add ellipse, parabola, quadratic, rectangular hyperbola, constant
 
-let X = new NumberGenerator("column");
+let X = new NumberGenerator("column2D");
 
 X.modifier('range', '30, 200');
 X.modifier('trend', 'linear');
