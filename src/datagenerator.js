@@ -14,6 +14,7 @@ class DataGenerator extends ConstantValue {
         this.finalJSONAr = [];
         this.finalJSONCategory = [];
         this.propertiesToBeAssigned = [];
+        this.commandStack = [];
         // 0 - Data, 1 - DataSet, 2 - Scatter, 3 - Bubble
         this.chartType = -1;
         this.setChartType(str);
@@ -62,6 +63,7 @@ class DataGenerator extends ConstantValue {
     }
 
     assignProperty(property, value, location) {
+        this.commandStack.push('assignProperty("'+property+'", "'+value+'", "'+location+'")');
         let ar = [];
         ar.push(property);
         ar.push(value);
@@ -254,11 +256,26 @@ class DataGenerator extends ConstantValue {
     }
 
     modifyNumber(property, value) {
+        this.commandStack.push('modifyNumber("'+property+'", "'+value+'")');
         numberGeneratorObj.modifier(property, value);
     }
     generateNumber(numberType, total, append, label) {
+        this.commandStack.push('generateNumber("'+numberType+'", '+total+', '+append+ (label===undefined?')':', "'+label+'")'));
         this.addArray(numberGeneratorObj.generate(numberType, total, label), append);
     }
+
+    getCommandStack(){
+        let i;
+        console.log(this.commandStack.length);
+        for(i=0;i<this.commandStack.length;i++){
+            console.log(this.commandStack[i]);
+        }
+    }
+    clearCommandStack(){
+        this.commandStack=[];
+        return this.commandStack.length;
+    }
+
     getJSON() {
         this.finalJSON['chart'] = {};
         if (this.chartType === 0) {
@@ -279,7 +296,7 @@ class DataGenerator extends ConstantValue {
     }
 }
 
-const datageneratorObj = new DataGenerator('mscolumn2d');
+const datageneratorObj = new DataGenerator('column2d');
 
 // Write your code here
 
@@ -293,7 +310,8 @@ datageneratorObj.generateNumber('integer', 5, false, 'month_short');
 datageneratorObj.modifyNumber('range', '300, 500');
 datageneratorObj.modifyNumber('trend', 'random');
 datageneratorObj.assignProperty('abc', 'series', 'chart');
-datageneratorObj.assignProperty('xyz', 'random', 'category');
+
 datageneratorObj.generateNumber('integer', 5, false);
 
 datageneratorObj.getJSON();
+// datageneratorObj.getCommandStack();
