@@ -64,26 +64,26 @@ class NumberGenerator {
   generate(type, n, label) {
     let spacing = -1,
       i = 0;
-    if (type === 'integer') {
+    if (type === 'integer' || type === 'decimal') {
       //Adds n unique random numbers to the data this.array
       if (this.trend.property === 'random') {
         if (label) {
           let sg = new StringGenerator(n, label);
-          return [this.random(n), sg.generate()];
+          return [this.random(n, type), sg.generate()];
         } else
-          return this.random(n);
+          return this.random(n, type);
       } else if (this.trend.property === 'linear') {
         if (label) {
           let sg = new StringGenerator(n, label);
-          return [this.linear(n), sg.generate()];
+          return [this.linear(n, type), sg.generate()];
         } else
-          return this.linear(n);
+          return this.linear(n, type);
       } else if (this.trend.property === 'exp') {
         if (label) {
           let sg = new StringGenerator(n, label);
-          return [this.exponential(n), sg.generate()];
+          return [this.exponential(n, type), sg.generate()];
         } else
-          return this.exponential(n);
+          return this.exponential(n, type);
       }
     } else if (label) {
       let sg = new StringGenerator(n, label);
@@ -97,17 +97,24 @@ class NumberGenerator {
    * @param {any} n 
    * @memberof NumberGenerator
    */
-  random(n) {
+  random(n, type) {
     let spacing = -1,
       i = 0,
       arr = [];
     while (i < n) {
-      let num = Math.floor((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound);
+      let num;
+      if(type === 'integer')
+        num = Math.floor((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound);
+      else
+        num = (Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound;
       if (arr.indexOf(num) > -1)
         continue;
       else {
         if (this.chartType === 'scatter')
-          arr.push([Math.floor((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound), num]);
+          if(type === 'integer')
+            arr.push([Math.floor((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound), num]);
+          else
+            arr.push([(Math.random() * (this.range.upperBound - this.range.lowerBound) + this.range.lowerBound), num]);
         else
           arr.push(num);
         i++;
@@ -122,7 +129,7 @@ class NumberGenerator {
    * @param {any} n 
    * @memberof NumberGenerator
    */
-  linear(n) {
+  linear(n, type) {
     let arr = [];
     if (this.prevTrend !== this.trend.property)
       this.counter = 0;
@@ -137,9 +144,15 @@ class NumberGenerator {
     //generate the y axis values
     for (let i = 0; i < n; i++)
       if (this.chartType === 'scatter')
-        arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b)]);
+        if(type === 'integer')
+          arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b)]);
+        else
+          arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b)]);
       else
-        arr.push(Math.ceil((this.trend.a * x[i]) + this.trend.b));
+        if(type === 'integer')
+          arr.push(Math.ceil((this.trend.a * x[i]) + this.trend.b));
+        else
+          arr.push(((this.trend.a * x[i]) + this.trend.b));
 
     return arr;
   }
@@ -150,7 +163,7 @@ class NumberGenerator {
    * @param {any} n 
    * @memberof NumberGenerator
    */
-  exponential(n) {
+  exponential(n, type) {
     let arr = [];
     if (this.prevTrend !== this.trend.property)
       this.counter = 0;
@@ -165,9 +178,15 @@ class NumberGenerator {
     //generate the y axis values
     for (let i = 0; i < n; i++) {
       if (this.chartType === 'scatter')
-        arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i]))]);
+        if(type === 'integer')
+          arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i]))]);
+        else
+          arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i]))]);
       else
-        arr.push(Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])));
+        if(type === 'integer')
+          arr.push(Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])));
+        else
+          arr.push((this.trend.a * Math.exp(this.trend.b * x[i])));
     }
 
     return arr;
@@ -180,12 +199,16 @@ class NumberGenerator {
    * @returns 
    * @memberof NumberGenerator
    */
-  generateX(n) {
+  generateX(n, type) {
     let x = [],
       i = 0;
     //Generate random numbers on the x axis within the range
     while (i < n) {
-      let num = Math.floor((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound);
+      let num;
+      if(type === 'integer')
+        num = Math.floor((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound);
+      else
+        num = ((Math.random() * (this.range.upperBound - this.range.lowerBound)) + this.range.lowerBound);
       if (x.indexOf(num) > -1)
         continue;
       else {
@@ -208,7 +231,7 @@ module.exports = NumberGenerator;
 
 let X = new NumberGenerator("column2D");
 
-X.modifier('range', '30, 100');
+/*X.modifier('range', '30, 100');
 X.modifier('trend', 'linear');
 let c = X.generate('integer', 10, 'month_short');
 console.log(c[0]);
@@ -218,9 +241,9 @@ X.modifier('range', '300, 100');
 X.modifier('trend', 'linear');
 let d = X.generate('integer', 5, 'generic1');
 console.log(d[0]);
-console.log(d[1]);
+console.log(d[1]);  
 
 X.modifier('range', '300, 100');
 X.modifier('trend', 'linear');
 let e = X.generate('none', 5, 'generic1');
-console.log(e);
+console.log(e);*/
