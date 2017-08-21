@@ -1,5 +1,7 @@
 
-
+const FusionCharts = require('../fusioncharts/js/fusioncharts.js');
+//require("../fusioncharts/js/fusioncharts.charts.js")(FusionCharts);
+//require("../fusioncharts/js/themes/fusioncharts.theme.fint.js")(FusionCharts);
 const NumberGenerator = require('./numbergenerator.js');
 const ConstantValue = require('./constant.config.js');
 
@@ -79,7 +81,7 @@ class DataGenerator extends ConstantValue {
         if (str === undefined) {
             return false;
         }
-
+        
         if (this.presentIn(this.chartTypeZero, str)) {
             this.chartType = 0;
         } else if (this.presentIn(this.chartTypeOne, str)) {
@@ -92,7 +94,7 @@ class DataGenerator extends ConstantValue {
             console.log('Chart type not supported.');
             return false;
         }
-        numberGeneratorObj.chartType = this.chartType;
+        numberGeneratorObj.chartType = str;
         return this.chartType;
     }
 
@@ -268,6 +270,8 @@ class DataGenerator extends ConstantValue {
     }
 
     parseDatasetScatter(arr, append) {
+        console.log('SSSS');
+        console.log( arr);
         let i, tempAr = [],
             tempObj = {};
 
@@ -287,7 +291,7 @@ class DataGenerator extends ConstantValue {
         tempObj = {};
         tempObj['seriesname'] = 'scatter';
         tempObj['data'] = tempAr;
-
++
         this.finalJSONAr.push(tempObj);
     }
 
@@ -314,13 +318,14 @@ class DataGenerator extends ConstantValue {
     }
 
     createNewPropertyOfNumber(property, _value) {
-        Object.defineProperty(NumberGenerator.prototype, property, {
+        Object.defineProperty(NumberGenerator.p+rototype, property, {
             value: _value
         });
     }
 
     modifyNumber(property, value) {
         this.commandStack.push('modifyNumber("'+property+'", "'+value+'")');
+        console.log(numberGeneratorObj.chartType);
         numberGeneratorObj.modifier(property, value);
     }
     generateNumber(numberType, total, append, label) {
@@ -330,7 +335,7 @@ class DataGenerator extends ConstantValue {
 
     getCommandStack(){
         let i;
-        console.log(this.commandStack.length);
+        // console.log(this.commandStack.length);
         for(i=0;i<this.commandStack.length;i++){
             console.log(this.commandStack[i]);
         }
@@ -341,7 +346,7 @@ class DataGenerator extends ConstantValue {
     }
 
     getJSON() {
-        this.finalJSON['chart'] = {};
+        this.finalJSON['chart'] = {'theme':'fint'};
         if (this.chartType === 0) {
             this.finalJSON['data'] = this.finalJSONAr;
         } else if (this.chartType === 1) {
@@ -355,22 +360,58 @@ class DataGenerator extends ConstantValue {
         this.applyProperties();
 
         console.log(JSON.stringify(this.finalJSON, null, 2));
-        this.initialize();
+        // this.initialize();
         return JSON.stringify(this.finalJSON, null, 2);
     }
 }
 
-const datageneratorObj = new DataGenerator('column2d');
+/*window.driver=function(tut){
+    let header1 = '<p style="font-size:25px;color:black;"><strong>Getting Started</strong></p></br></br>';
+    let obj = {
+        'tut1': '<p style="font-size:20px;color:#6f726b;">To generate data, you need to first create an object of type <i>DataGenerator</i>. To do so, run the following line: <span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\') </span>. Here the datagenerator constructor takes in a chart type as string.'+
+        '</br>Once created you can use the object to add modifiers and then generate your data. This particular example concerns with showing how to produce data in a given trend. Currently there are 3 presets for this attribute, namely, <span style="color:black;">random, linear, exponential</span>.</br> Here\'s some sample code to help you setup.</br><span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\');</br>datageneratorObj.modifyNumber(\'range\', \'30, 200\');</br>datageneratorObj.modifyNumber(\'trend\', \'linear\');</br>datageneratorObj.generateNumber(\'integer\', 5, false, \'generic1\');</span></br>Here we set the range of both X and Y to be within 30, 200. We then defined the trend to be a straight line and generated 5 integer numbers with a preset label of generic1.</p>',
+    };
+    document.getElementById("lower").innerHTML = header1+obj[tut];
+
+    const datageneratorObj = new DataGenerator('column2d');
+    datageneratorObj.modifyNumber('range', '30, 200');
+    datageneratorObj.modifyNumber('trend', 'linear');
+    datageneratorObj.generateNumber('integer', 5, false,'generic1');
+    let d = datageneratorObj.getJSON();
+    console.log(d);
+    let chart_obj = {
+        type: 'column2d',
+        renderAt: 'chart',
+        width: '95%',
+        height: '90%',
+        dataFormat: 'json',
+        dataSource: d
+    }
+
+    document.getElementById("json").innerHTML = d;
+
+    // console.log(chart_obj);
+
+    FusionCharts.ready(function(){
+      	let revenueChart = new FusionCharts(chart_obj);
+        revenueChart.render();
+    });
+
+    console.log(chart_obj);
+}*/
+
+const datageneratorObj = new DataGenerator('scatter');
 
 // Write your code here
-
-
+// numberGeneratorObj.chartType='scatter';
+console.log(numberGeneratorObj.chartType);
 datageneratorObj.modifyNumber('range', '30, 200');
 datageneratorObj.modifyNumber('trend', 'linear');
 datageneratorObj.generateNumber('integer', 5, false,'generic1');
-
+// datageneratorObj.getJSON();
+// console.log(datageneratorObj);
 // datageneratorObj.modifyNumber('range', '30, 200');
-datageneratorObj.modifyNumber('trend', 'exp');
+/*datageneratorObj.modifyNumber('trend', 'exp');
 datageneratorObj.generateNumber('integer', 5, false,'generic1');
 
 // datageneratorObj.getJSON();
@@ -379,7 +420,7 @@ datageneratorObj.modifyNumber('range', '300, 500');
 datageneratorObj.modifyNumber('trend', 'random');
 // datageneratorObj.assignProperty('abc', 'series', 'chart');
 
-datageneratorObj.generateNumber('integer', 10, false,'generic2');
+datageneratorObj.generateNumber('integer', 10, false,'generic2');*/
 
-datageneratorObj.getJSON();
-datageneratorObj.getCommandStack();
+//datageneratorObj.getJSON();
+//datageneratorObj.getCommandStack();
