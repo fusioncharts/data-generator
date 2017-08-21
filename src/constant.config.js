@@ -11,6 +11,8 @@ class ConstantValue{
         this.chartTypeOne = ['mscolumn2d', 'msbar2d', 'msline', 'msarea', 'stackedcolumn2d', 'stackedarea2d', 'stackedbar2d'];
         this.chartTypeTwo = ['scatter'];
         this.chartTypeThree = ['bubble'];
+        this.chartTypeFour = ['mlevelpie'];
+        this.chartTypeFive = ['msstackedcolumn'];
     }
 }
 module.exports=ConstantValue;

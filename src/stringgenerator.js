@@ -12,10 +12,11 @@ class StringGenerator extends ConstantValue{
         for(let i=0;i<this.n;i++){
             if(this.label === 'generic1' || this.label === 'generic2')
                 arrLabel.push(this[this.label]+' '+i);
-            else if(this.label.includes('Random')){
+            else if(this.label.includes('random')){
                 let str = "";
                 for(let i=0;i<this[this.label];i++)
                     str+= this['alphanumeric'][Math.floor(Math.random() * (this['alphanumeric'].length-1))];
+                // console.log('SG '+str);
                 arrLabel.push(str);
             }
             else if(this.label === 'month_short' || this.label === 'month_long'){

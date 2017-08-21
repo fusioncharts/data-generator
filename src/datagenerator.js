@@ -12,7 +12,9 @@ class DataGenerator extends ConstantValue {
         this.inputStringAr = [];
         this.finalJSON = {};
         this.finalJSONAr = [];
-        // 0 - Data, 1 - Data, 2 - Scatter, 3 - Bubble
+        this.finalJSONCategory = [];
+        this.propertiesToBeAssigned = [];
+        // 0 - Data, 1 - DataSet, 2 - Scatter, 3 - Bubble
         this.chartType = -1;
         this.setChartType(str);
     }
@@ -24,6 +26,8 @@ class DataGenerator extends ConstantValue {
         this.inputStringAr = [];
         this.finalJSON = {};
         this.finalJSONAr = [];
+        this.finalJSONCategory = [];
+        this.propertiesToBeAssigned = [];
     }
 
     presentIn(arr, target) {
@@ -57,6 +61,64 @@ class DataGenerator extends ConstantValue {
         return this.chartType;
     }
 
+    assignProperty(property, value, location) {
+        let ar = [];
+        ar.push(property);
+        ar.push(value);
+        ar.push(location);
+
+        this.propertiesToBeAssigned.push(ar);
+    }
+
+    applyProperties() {
+        let i, j, k;
+
+        for (i = 0; i < this.propertiesToBeAssigned.length; i++) {
+            if (this.propertiesToBeAssigned[i][2] === 'data') {
+                // console.log('data');
+                if (this.finalJSON.dataset !== undefined) {
+                    for (j = 0; j < this.finalJSON.dataset.length; j++) {
+                        for (k = 0; k < this.finalJSON.dataset[j].data.length; k++) {
+                            this.finalJSON.dataset[j].data[k][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                        }
+                    }
+                } else if (this.finalJSON.data !== undefined) {
+                    for (j = 0; j < this.finalJSON.data.length; j++) {
+                        this.finalJSON.data[j][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                    }
+                }
+            } else if (this.propertiesToBeAssigned[i][2] === 'dataset') {
+                // console.log('dataset');
+                if (this.finalJSON.dataset !== undefined) {
+                    for (j = 0; j < this.finalJSON.dataset.length; j++) {
+                        this.finalJSON.dataset[j][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                    }
+                }
+            } else if (this.propertiesToBeAssigned[i][2] === 'categories') {
+                // console.log('categories');
+                if (this.finalJSON.categories !== undefined) {
+                    for (j = 0; j < this.finalJSON.categories.length; j++) {
+                        this.finalJSON.categories[j][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                    }
+                }
+            } else if (this.propertiesToBeAssigned[i][2] === 'category') {
+                // console.log('category')
+                if (this.finalJSON.categories !== undefined) {
+                    for (j = 0; j < this.finalJSON.categories.length; j++) {
+                        for (k = 0; k < this.finalJSON.categories[j].category.length; k++) {
+                            this.finalJSON.categories[j].category[k][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                        }
+                    }
+                }
+            } else if (this.propertiesToBeAssigned[i][2] === 'chart') {
+                // console.log('chart');
+                this.finalJSON.chart[this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+            } else if (this.propertiesToBeAssigned[i][2] === 'json') {
+                this.finalJSON[this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+            }
+        }
+    }
+
     parseData(arr) {
         let i, tempJSONdata = {};
 
@@ -72,16 +134,37 @@ class DataGenerator extends ConstantValue {
 
     parseDataset(arr, append) {
         let i, tempAr = [],
+            tempObj = {},
+            tempCategory = [];
+
+
+
+        if (arr[1].length !== 0) {
+            if (this.finalJSONCategory.length > 0) {
+                tempCategory = this.finalJSONCategory.pop()['category'];
+            }
+            // console.log(tempCategory);
+            for (i = 0; i < arr[1].length; i++) {
+                tempObj = {};
+                tempObj['label'] = arr[1][i];
+                tempCategory.push(tempObj);
+            }
+
             tempObj = {};
+            tempObj['category'] = tempCategory;
+            this.finalJSONCategory.push(tempObj);
+        }
 
         if (append === true) {
             if (this.finalJSONAr.length > 0) {
                 tempAr = this.finalJSONAr.pop().data;
             }
         }
-        for (i = 0; i < arr.length; i++) {
+
+        // console.log(tempAr);
+        for (i = 0; i < arr[0].length; i++) {
             tempObj = {};
-            tempObj['value'] = arr[i] + '';
+            tempObj['value'] = arr[0][i] + '';
             tempAr.push(tempObj);
         }
 
@@ -143,7 +226,7 @@ class DataGenerator extends ConstantValue {
     }
 
     addArray(arr, append) {
-        console.log(arr);
+        // console.log(arr);
         if (arr === undefined || arr.length === 0) {
             return 'Array cannot be undefined or empty';
         }
@@ -173,19 +256,22 @@ class DataGenerator extends ConstantValue {
     modifyNumber(property, value) {
         numberGeneratorObj.modifier(property, value);
     }
-    generateNumber(numberType, total, label, append) {
+    generateNumber(numberType, total, append, label) {
         this.addArray(numberGeneratorObj.generate(numberType, total, label), append);
     }
     getJSON() {
+        this.finalJSON['chart'] = {};
         if (this.chartType === 0) {
             this.finalJSON['data'] = this.finalJSONAr;
         } else if (this.chartType === 1) {
+            this.finalJSON['categories'] = this.finalJSONCategory;
             this.finalJSON['dataset'] = this.finalJSONAr;
         } else if (this.chartType === 2) {
             this.finalJSON['dataset'] = this.finalJSONAr;
         } else if (this.chartType === 3) {
             this.finalJSON['dataset'] = this.finalJSONAr;
         }
+        this.applyProperties();
 
         console.log(JSON.stringify(this.finalJSON, null, 2));
         this.initialize();
@@ -193,19 +279,21 @@ class DataGenerator extends ConstantValue {
     }
 }
 
-const datageneratorObj = new DataGenerator('column2d');
+const datageneratorObj = new DataGenerator('mscolumn2d');
 
 // Write your code here
 
 
-datageneratorObj.modifyNumber('range','30, 200');
-datageneratorObj.modifyNumber('trend','linear');
-datageneratorObj.generateNumber('integer',5,'month_short',false);
+datageneratorObj.modifyNumber('range', '30, 200');
+datageneratorObj.modifyNumber('trend', 'linear');
+datageneratorObj.generateNumber('integer', 5, false, 'month_short');
 
-datageneratorObj.getJSON();
+// datageneratorObj.getJSON();
 
-datageneratorObj.modifyNumber('range','300, 500');
-datageneratorObj.modifyNumber('trend','random');
-datageneratorObj.generateNumber('integer',5,'month_short',true);
+datageneratorObj.modifyNumber('range', '300, 500');
+datageneratorObj.modifyNumber('trend', 'random');
+datageneratorObj.assignProperty('abc', 'series', 'chart');
+datageneratorObj.assignProperty('xyz', 'random', 'category');
+datageneratorObj.generateNumber('integer', 5, false);
 
 datageneratorObj.getJSON();

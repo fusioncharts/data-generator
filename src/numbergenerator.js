@@ -244,32 +244,32 @@ module.exports = NumberGenerator;
 
 //1. TODO: Add ellipse, parabola, quadratic, rectangular hyperbola, constant
 
-let X = new NumberGenerator("scatter");
+// // let X = new NumberGenerator("scatter");
 
-X.modifier('range', '30, 100');
-X.modifier('trend', 'linear');
-let c = X.generate('integer', 10);
-console.log(c);
-//console.log(c[0]);
-//console.log(c[1]);
+// // X.modifier('range', '30, 100');
+// // X.modifier('trend', 'linear');
+// // let c = X.generate('integer', 10);
+// // console.log(c);
+// // //console.log(c[0]);
+// // //console.log(c[1]);
 
-//console.log(X);
+// // //console.log(X);
 
-X.modifier('range', '100, 170', '100, 30');
-X.modifier('trend', 'linear');
-let d = X.generate('decimal', 10);
-console.log(d[0]);
-console.log(d[1]);
+// // X.modifier('range', '100, 170', '100, 30');
+// // X.modifier('trend', 'linear');
+// // let d = X.generate('decimal', 10);
+// // console.log(d[0]);
+// // console.log(d[1]);
 
-//console.log(X);
+// // //console.log(X);
 
-/*X.modifier('range', '300, 100');
-X.modifier('trend', 'linear');
-let d = X.generate('integer', 5, 'generic1');
-console.log(d[0]);
-console.log(d[1]);  
+// // /*X.modifier('range', '300, 100');
+// // X.modifier('trend', 'linear');
+// // let d = X.generate('integer', 5, 'generic1');
+// // console.log(d[0]);
+// // console.log(d[1]);  
 
-X.modifier('range', '300, 100');
-X.modifier('trend', 'linear');
-let e = X.generate('none', 5, 'generic1');
-console.log(e);*/
+// // X.modifier('range', '300, 100');
+// // X.modifier('trend', 'linear');
+// let e = X.generate('none', 5, 'generic1');
+// console.log(e);*/
