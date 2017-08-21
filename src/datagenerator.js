@@ -1,8 +1,11 @@
 const NumberGenerator = require('./numbergenerator.js');
+const ConstantValue = require('./constant.config.js');
+
 const numberGeneratorObj = new NumberGenerator();
 
-class DataGenerator {
+class DataGenerator extends ConstantValue {
     constructor(str) {
+        super();
         this.inputAr = [];
         this.inputDataSetAr = [];
         this.inputDataScatter = [];
@@ -11,10 +14,6 @@ class DataGenerator {
         this.finalJSONAr = [];
         // 0 - Data, 1 - Data, 2 - Scatter, 3 - Bubble
         this.chartType = -1;
-        this.chartTypeZero = ['bar2d', 'column2d', 'pie2d', 'line', 'area2d', 'doughnut2d', 'pareto2d'];
-        this.chartTypeOne = ['mscolumn2d', 'msbar2d', 'msline', 'msarea', 'stackedcolumn2d', 'stackedarea2d', 'stackedbar2d'];
-        this.chartTypeTwo = ['scatter'];
-        this.chartTypeThree = ['bubble'];
         this.setChartType(str);
     }
 

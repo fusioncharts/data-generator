@@ -1,4 +1,4 @@
-const StringGenerator = require('./string_generator.js');
+const StringGenerator = require('./stringgenerator.js');
 
 /**
  * 

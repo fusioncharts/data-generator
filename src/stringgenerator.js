@@ -1,14 +1,10 @@
-class StringGenerator{
+const ConstantValue=require('./constant.config.js');
+
+class StringGenerator extends ConstantValue{
     constructor(n, label){
+        super();
         this.n = n;
         this.label = label;
-        this['alphanumeric'] = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '_', '=', ',', '<', '>', '?', '[', ']'];
-        this['month_short'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        this['month_long'] = ['January', 'Februaury', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'Octobeer', 'November', 'December'];
-        this['generic1'] = 'label';
-        this['generic2'] = 'test';
-        this['smallRandom'] = 3;
-        this['largeRandom'] = 15;
     }
 
     generate(){
