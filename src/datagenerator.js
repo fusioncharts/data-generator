@@ -1,9 +1,23 @@
+
+
 const NumberGenerator = require('./numbergenerator.js');
 const ConstantValue = require('./constant.config.js');
 
 const numberGeneratorObj = new NumberGenerator();
 
+
+/**
+ * Class that creates a json for fusioncharts testing
+ * @class DataGenerator
+ * @extends {ConstantValue}
+ */
 class DataGenerator extends ConstantValue {
+    
+    /**
+     * Creates an instance of DataGenerator.
+     * @param {string} str 
+     * @memberof DataGenerator
+     */
     constructor(str) {
         super();
         this.inputAr = [];
@@ -20,6 +34,11 @@ class DataGenerator extends ConstantValue {
         this.setChartType(str);
     }
 
+    
+    /**
+     * Reset all the class members.
+     * @memberof DataGenerator
+     */
     initialize() {
         this.inputAr = [];
         this.inputDataSetAr = []
@@ -31,6 +50,14 @@ class DataGenerator extends ConstantValue {
         this.propertiesToBeAssigned = [];
     }
 
+
+    /**
+     * Checks if an element is present in array
+     * @param {array} arr 
+     * @param {string} target 
+     * @returns boolean
+     * @memberof DataGenerator
+     */
     presentIn(arr, target) {
         let i;
         for (i = 0; i < arr.length; i++) {
@@ -41,6 +68,13 @@ class DataGenerator extends ConstantValue {
         return false;
     }
 
+    
+    /**
+     * Sets chart type
+     * @param {string} str 
+     * @returns boolean | chartType
+     * @memberof DataGenerator
+     */
     setChartType(str) {
         if (str === undefined) {
             return false;
@@ -62,6 +96,14 @@ class DataGenerator extends ConstantValue {
         return this.chartType;
     }
 
+    
+    /**
+     * Stores a property given by user as input.
+     * @param {string} property 
+     * @param {string} value 
+     * @param {string} location 
+     * @memberof DataGenerator
+     */
     assignProperty(property, value, location) {
         this.commandStack.push('assignProperty("'+property+'", "'+value+'", "'+location+'")');
         let ar = [];
@@ -70,8 +112,13 @@ class DataGenerator extends ConstantValue {
         ar.push(location);
 
         this.propertiesToBeAssigned.push(ar);
+        return ar;
     }
 
+    /**
+     * Applies/adds all properties given as input by the user.
+     * @memberof DataGenerator
+     */
     applyProperties() {
         let i, j, k;
 
@@ -121,6 +168,13 @@ class DataGenerator extends ConstantValue {
         }
     }
 
+
+    /**
+     * Create data array
+     * @param {string} arr 
+     * @returns length of data array
+     * @memberof DataGenerator
+     */
     parseData(arr) {
         let i, tempJSONdata = {};
 
@@ -134,12 +188,16 @@ class DataGenerator extends ConstantValue {
         return this.finalJSONAr.length;
     }
 
+    /**
+     * Create a dataset array
+     * @param {array} arr - Data to be processed
+     * @param {boolean} append - whether the current input should be appended to the previous input
+     * @memberof DataGenerator
+     */
     parseDataset(arr, append) {
         let i, tempAr = [],
             tempObj = {},
             tempCategory = [];
-
-
 
         if (arr[1].length !== 0) {
             if (this.finalJSONCategory.length > 0) {
@@ -177,6 +235,12 @@ class DataGenerator extends ConstantValue {
         this.finalJSONAr.push(tempObj);
     }
 
+    /**
+     * Create dataset for bubble chart
+     * @param {array} arr - Data to be processed. 
+     * @param {boolean} append - Whether to append the current data to the last data.
+     * @memberof DataGenerator
+     */
     parseDatasetBubble(arr, append) {
         let i, tempAr = [],
             tempObj = {};
@@ -303,15 +367,19 @@ const datageneratorObj = new DataGenerator('column2d');
 
 datageneratorObj.modifyNumber('range', '30, 200');
 datageneratorObj.modifyNumber('trend', 'linear');
-datageneratorObj.generateNumber('integer', 5, false, 'month_short');
+datageneratorObj.generateNumber('integer', 5, false,'generic1');
+
+// datageneratorObj.modifyNumber('range', '30, 200');
+datageneratorObj.modifyNumber('trend', 'exp');
+datageneratorObj.generateNumber('integer', 5, false,'generic1');
 
 // datageneratorObj.getJSON();
 
 datageneratorObj.modifyNumber('range', '300, 500');
 datageneratorObj.modifyNumber('trend', 'random');
-datageneratorObj.assignProperty('abc', 'series', 'chart');
+// datageneratorObj.assignProperty('abc', 'series', 'chart');
 
-datageneratorObj.generateNumber('integer', 5, false);
+datageneratorObj.generateNumber('integer', 10, false,'generic2');
 
 datageneratorObj.getJSON();
-// datageneratorObj.getCommandStack();
+datageneratorObj.getCommandStack();
