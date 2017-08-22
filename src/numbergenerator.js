@@ -126,11 +126,16 @@ class NumberGenerator {
       if (arr.indexOf(num) > -1)
         continue;
       else {
-        if (this.chartType === 'scatter')
+        if (type === 'scatter')
           if(type === 'integer')
             arr.push([Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound), num]);
           else
             arr.push([(Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound) + this.rangeX.lowerBound), num]);
+        else if(type === 'bubble')
+          if(type === 'integer')
+            arr.push([Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound), num, Math.floor((Math.random() * 100)+50)]);
+          else
+            arr.push([(Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound) + this.rangeX.lowerBound), num, (Math.random() * 100)+50]);
         else
           arr.push(num);
         i++;
@@ -164,6 +169,11 @@ class NumberGenerator {
           arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b)]);
         else
           arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b)]);
+      else if(type === 'bubble')
+        if(type === 'integer')
+          arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b), Math.floor((Math.random() * 100)+50)]);
+        else
+          arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b), (Math.random() * 100)+50]);
       else
         if(type === 'integer')
           arr.push(Math.ceil((this.trend.a * x[i]) + this.trend.b));
@@ -193,11 +203,16 @@ class NumberGenerator {
 
     //generate the y axis values
     for (let i = 0; i < n; i++) {
-      if (this.chartType === 'scatter')
+      if (type === 'scatter')
         if(type === 'integer')
           arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i]))]);
         else
           arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i]))]);
+      else if(type === 'bubble')
+        if(type === 'integer')
+          arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])), Math.floor((Math.random() * 100)+50)]);
+        else
+          arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i])), (Math.random() * 100)+50]);
       else
         if(type === 'integer')
           arr.push(Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])));
@@ -244,12 +259,11 @@ module.exports = NumberGenerator;
 
 //1. TODO: Add ellipse, parabola, quadratic, rectangular hyperbola, constant
 
-// // let X = new NumberGenerator("scatter");
+// let X = new NumberGenerator("scatter");
 
-// // X.modifier('range', '30, 100');
-// // X.modifier('trend', 'linear');
-// // let c = X.generate('integer', 10);
-// // console.log(c);
+// X.modifier('range', '30, 100');
+// X.modifier('trend', 'linear');
+// console.log(X.generate('integer', 10));
 // // //console.log(c[0]);
 // // //console.log(c[1]);
 

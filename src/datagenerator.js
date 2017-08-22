@@ -1,3 +1,10 @@
+<<<<<<< HEAD
+=======
+
+const FusionCharts = require('../fusioncharts/js/fusioncharts.js');
+require("../fusioncharts/js/fusioncharts.charts.js")(FusionCharts);
+require("../fusioncharts/js/themes/fusioncharts.theme.fint.js")(FusionCharts);
+>>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 const NumberGenerator = require('./numbergenerator.js');
 const ConstantValue = require('./constant.config.js');
 
@@ -77,7 +84,7 @@ class DataGenerator extends ConstantValue {
         if (str === undefined) {
             return false;
         }
-
+        
         if (this.presentIn(this.chartTypeZero, str)) {
             this.chartType = 0;
         } else if (this.presentIn(this.chartTypeOne, str)) {
@@ -274,7 +281,12 @@ class DataGenerator extends ConstantValue {
      * @memberof DataGenerator
      */
     parseDatasetScatter(arr, append) {
+<<<<<<< HEAD
         // console.log(arr);
+=======
+        console.log('SSSS');
+        console.log( arr);
+>>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         let i, tempAr = [],
             tempObj = {};
 
@@ -294,7 +306,7 @@ class DataGenerator extends ConstantValue {
         tempObj = {};
         tempObj['seriesname'] = 'scatter';
         tempObj['data'] = tempAr;
-
++
         this.finalJSONAr.push(tempObj);
     }
 
@@ -328,6 +340,14 @@ class DataGenerator extends ConstantValue {
         }
     }
 
+<<<<<<< HEAD
+=======
+    createNewPropertyOfNumber(property, _value) {
+        Object.defineProperty(NumberGenerator.p+rototype, property, {
+            value: _value
+        });
+    }
+>>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 
     /**
      * 
@@ -336,7 +356,12 @@ class DataGenerator extends ConstantValue {
      * @memberof DataGenerator
      */
     modifyNumber(property, value) {
+<<<<<<< HEAD
         this.commandStack.push('modifyNumber("' + property + '", "' + value + '")');
+=======
+        this.commandStack.push('modifyNumber("'+property+'", "'+value+'")');
+        console.log(numberGeneratorObj.chartType);
+>>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         numberGeneratorObj.modifier(property, value);
     }
 
@@ -363,8 +388,13 @@ class DataGenerator extends ConstantValue {
      */
     getCommandStack() {
         let i;
+<<<<<<< HEAD
         console.log(this.commandStack.length);
         for (i = 0; i < this.commandStack.length; i++) {
+=======
+        // console.log(this.commandStack.length);
+        for(i=0;i<this.commandStack.length;i++){
+>>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
             console.log(this.commandStack[i]);
         }
     }
@@ -389,7 +419,7 @@ class DataGenerator extends ConstantValue {
      * @memberof DataGenerator
      */
     getJSON() {
-        this.finalJSON['chart'] = {};
+        this.finalJSON['chart'] = {'theme':'fint'};
         if (this.chartType === 0) {
             this.finalJSON['data'] = this.finalJSONAr;
         } else if (this.chartType === 1) {
@@ -403,16 +433,81 @@ class DataGenerator extends ConstantValue {
         this.applyProperties();
 
         console.log(JSON.stringify(this.finalJSON, null, 2));
-        this.initialize();
+        // this.initialize();
         return JSON.stringify(this.finalJSON, null, 2);
     }
 }
 
+<<<<<<< HEAD
 const datageneratorObj = new DataGenerator('scatter');
+=======
+// IMPORTANT : Reset function required cause one stack can affect another stack. Always reset when creating new stack.
 
-// Write your code here
+window.driver=function(tut){
+    let header = ['<p style="font-size:25px;color:black;"><strong>Getting Started</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Using Trends</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>More about Modifiers &amp; Generators</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Working with Large Data. Zoom Scatter Plot</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Defining Custom Properties</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Using JoCasta with FusionCharts in the browser</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Importing &amp; Exporting Custom Stacks</strong></p></br></br>'];
+    let obj = {
+        'tut1': '<p style="font-size:20px;color:#6f726b;">To generate data, you need to first create an object of type <span style="color:black;">DataGenerator</span>. To do so, run the following line: <span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\') </span>. Here the datagenerator constructor takes in a chart type as string.'+
+        '</br>Once created you can use the object to add modifiers and then generate your data. This particular example concerns with showing how to produce varying results by using a simple property like <span style="color:black;">range</span>.</br></br><span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\');</br>datageneratorObj.modifyNumber(\'range\', \'30, 200\');</br>datageneratorObj.generateNumber(\'integer\', 5, false);</span></br></br>The first line initializes our data generator stack to use column chart properties. The next line uses a function called modifynumber which takes in a property and multiple values of that property. Here we define the range of the data to be generated. By default, the range for both X and Y axis are <span style="color:black;">[-1000000000, 1000000000]</span>.</br>When defining the range property, if only one string is passed as value, then the same range is applied to both X and Y axis by default. Passing another range string will apply the limit for both X and Y seperately(in that order).</br>The last line of code is the generator function which takes into consideration all the properties defined immediately before it and produces an array of values accordingly.</br>The function generateNumber takes in the following parameters, including optional ones. <span style="color:black;">generateNumber(type_of_number[integer, decimal], number_of_data-points, add_to_current_dataset[true, false], label_preset[many presets are provided. Check later tutorial])</span>',
+        
+        'tut2': '<p style="font-size:20px;color:#6f726b;">In order to generate vastly different data values for each test run, the <span style="color:black;">trend</span> property can be used. This property comes with three presets, namely <span style="color:black;">random</span>(set by defaut), <span style="color:black;">linear</span> and <span style="color:black;">exponential.</span></br></br><span style="color:black;">datageneratorObj.modifyNumber(\'trend\', \'exp\');</span></br></br>The above line sets the trend property to exponential.</br>The order of defining properties in the stack does not matter. Both range and trend properties can be stacked upon each other multiple times to give varying results.</br>Following lines of code were used to produce the above data.</br><span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\');'+
+                '</br>datageneratorObj.modifyNumber(\'range\', \'50000, 2000\');'+
+                '</br>datageneratorObj.modifyNumber(\'trend\', \'exp\');'+
+                '</br>datageneratorObj.generateNumber(\'integer\', 8, false , \'generic2\');'+
+                '</br>datageneratorObj.modifyNumber(\'range\', \'2000, 50000\');'+
+                '</br>datageneratorObj.modifyNumber(\'trend\', \'exp\');'+
+                '</br>datageneratorObj.generateNumber(\'integer\', 8, true , \'generic2\');</span></p>',
+    };
+    document.getElementById("lower").innerHTML = header[Number(tut.charAt(tut.length-1))-1]+obj[tut];
+    let chart_obj = {};
 
+    if(tut === 'tut1'){
+        const datageneratorObj = new DataGenerator('column2d');
+        datageneratorObj.modifyNumber('trend', 'random');
+        datageneratorObj.modifyNumber('range', '30, 200');
+        datageneratorObj.generateNumber('integer', 5, false , 'month_short');
+        let d = datageneratorObj.getJSON();
+        chart_obj = {
+            type: 'column2d',
+            renderAt: 'chart',
+            width: '95%',
+            height: '90%',
+            dataFormat: 'json',
+            dataSource: d
+        }
+        document.getElementById("json").innerHTML = d;
+    }
+    else if(tut === 'tut2'){
+        const datageneratorObj = new DataGenerator('column2d');
+        datageneratorObj.modifyNumber('range', '50000, 2000');
+        datageneratorObj.modifyNumber('trend', 'exp');
+        datageneratorObj.generateNumber('integer', 8, false , 'generic2');
+        datageneratorObj.modifyNumber('range', '2000, 50000');
+        datageneratorObj.modifyNumber('trend', 'exp');
+        datageneratorObj.generateNumber('integer', 8, true , 'generic2');
+        let d = datageneratorObj.getJSON();
+        chart_obj = {
+            type: 'column2d',
+            renderAt: 'chart',
+            width: '95%',
+            height: '90%',
+            dataFormat: 'json',
+            dataSource: d
+        }
+        document.getElementById("json").innerHTML = d;
+    }
 
+    // console.log(chart_obj);
+>>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
+
+    FusionCharts.ready(function(){
+      	let revenueChart = new FusionCharts(chart_obj);
+        revenueChart.render();
+    });
+
+    console.log(chart_obj);
+}
+
+<<<<<<< HEAD
 datageneratorObj.modifyNumber('range', '30, 200');
 datageneratorObj.modifyNumber('trend', 'linear');
 datageneratorObj.generateNumber('integer', 5, false, 'generic1');
@@ -420,6 +515,20 @@ datageneratorObj.generateNumber('integer', 5, false, 'generic1');
 datageneratorObj.modifyNumber('range', '30, 200');
 datageneratorObj.modifyNumber('trend', 'exp');
 datageneratorObj.generateNumber('integer', 5, true, 'generic1');
+=======
+//const datageneratorObj = new DataGenerator('scatter');
+
+// Write your code here
+// numberGeneratorObj.chartType='scatter';
+// datageneratorObj.modifyNumber('range', '30, 200');
+// datageneratorObj.modifyNumber('trend', 'linear');
+// datageneratorObj.generateNumber('integer', 5, false,'generic1');
+// datageneratorObj.getJSON();
+// console.log(datageneratorObj);
+// datageneratorObj.modifyNumber('range', '30, 200');
+/*datageneratorObj.modifyNumber('trend', 'exp');
+datageneratorObj.generateNumber('integer', 5, false,'generic1');
+>>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 
 datageneratorObj.getJSON();
 
@@ -427,7 +536,14 @@ datageneratorObj.getJSON();
 // datageneratorObj.modifyNumber('trend', 'random');
 // datageneratorObj.assignProperty('abc', 'series', 'chart');
 
+<<<<<<< HEAD
 // datageneratorObj.generateNumber('integer', 10, false,'generic2');
 
 // datageneratorObj.getJSON();
 // datageneratorObj.getCommandStack();
+=======
+datageneratorObj.generateNumber('integer', 10, false,'generic2');*/
+
+//datageneratorObj.getJSON();
+//datageneratorObj.getCommandStack();
+>>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
