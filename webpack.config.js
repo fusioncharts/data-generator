@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-        entry: './src/chunk.js',
+        entry: './src/datagenerator.js',
         output: {
             path: path.resolve(__dirname, 'build'),
             filename: 'main.bundle.js'
