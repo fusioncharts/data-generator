@@ -1,7 +1,5 @@
 
 const FusionCharts = require('../fusioncharts/js/fusioncharts.js');
-require("../fusioncharts/js/fusioncharts.charts.js")(FusionCharts);
-require("../fusioncharts/js/themes/fusioncharts.theme.fint.js")(FusionCharts);
 const NumberGenerator = require('./numbergenerator.js');
 const ConstantValue = require('./constant.config.js');
 
@@ -406,14 +404,18 @@ class DataGenerator extends ConstantValue {
         this.applyProperties();
 
         console.log(JSON.stringify(this.finalJSON, null, 2));
-        // this.initialize();
-        return JSON.stringify(this.finalJSON, null, 2);
+        let str = JSON.stringify(this.finalJSON, null, 2);
+        this.initialize();
+        return str;
     }
 }
 
 // IMPORTANT : Reset function required cause one stack can affect another stack. Always reset when creating new stack.
 
-window.driver=function(tut){
+this.driver=function(tut){
+    require("../fusioncharts/js/fusioncharts.charts.js")(FusionCharts);
+    require("../fusioncharts/js/themes/fusioncharts.theme.fint.js")(FusionCharts);
+
     let header = ['<p style="font-size:25px;color:black;"><strong>Getting Started</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Using Trends</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>More about Modifiers &amp; Generators</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Working with Large Data. Zoom Scatter Plot</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Defining Custom Properties</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Using JoCasta with FusionCharts in the browser</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Importing &amp; Exporting Custom Stacks</strong></p></br></br>'];
     let obj = {
         'tut1': '<p style="font-size:20px;color:#6f726b;">To generate data, you need to first create an object of type <span style="color:black;">DataGenerator</span>. To do so, run the following line: <span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\') </span>. Here the datagenerator constructor takes in a chart type as string.'+
@@ -476,30 +478,19 @@ window.driver=function(tut){
     console.log(chart_obj);
 }
 
-//const datageneratorObj = new DataGenerator('scatter');
+const datageneratorObj = new DataGenerator('bubble');
 
 // Write your code here
-// numberGeneratorObj.chartType='scatter';
-// datageneratorObj.modifyNumber('range', '30, 200');
-// datageneratorObj.modifyNumber('trend', 'linear');
-// datageneratorObj.generateNumber('integer', 5, false,'generic1');
-// datageneratorObj.getJSON();
-// console.log(datageneratorObj);
-// datageneratorObj.modifyNumber('range', '30, 200');
-/*datageneratorObj.modifyNumber('trend', 'exp');
+
+// numberGeneratorObj.chartType='bubble';
+datageneratorObj.modifyNumber('range', '30, 200');
+datageneratorObj.modifyNumber('trend', 'linear');
+datageneratorObj.generateNumber('integer', 5, false,'generic1');
+datageneratorObj.getJSON();
+
+datageneratorObj.modifyNumber('range', '30, 200');
+datageneratorObj.modifyNumber('trend', 'exp');
 datageneratorObj.generateNumber('integer', 5, false,'generic1');
 
 datageneratorObj.getJSON();
 
-// datageneratorObj.modifyNumber('range', '300, 500');
-// datageneratorObj.modifyNumber('trend', 'random');
-// datageneratorObj.assignProperty('abc', 'series', 'chart');
-
-// datageneratorObj.generateNumber('integer', 10, false,'generic2');
-
-// datageneratorObj.getJSON();
-// datageneratorObj.getCommandStack();
-datageneratorObj.generateNumber('integer', 10, false,'generic2');*/
-
-//datageneratorObj.getJSON();
-//datageneratorObj.getCommandStack();
