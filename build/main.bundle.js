@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -88,517 +88,6 @@ module.exports=ConstantValue;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-
-const FusionCharts = __webpack_require__(2);
-__webpack_require__(3)(FusionCharts);
-__webpack_require__(4)(FusionCharts);
-const NumberGenerator = __webpack_require__(5);
-const ConstantValue = __webpack_require__(0);
-
-const numberGeneratorObj = new NumberGenerator();
-
-
-/**
- * Class that creates a json for fusioncharts testing
- * @class DataGenerator
- * @extends {ConstantValue}
- */
-class DataGenerator extends ConstantValue {
-
-    /**
-     * Creates an instance of DataGenerator.
-     * @param {string} str 
-     * @memberof DataGenerator
-     */
-    constructor(str) {
-        super();
-        this.inputAr = [];
-        this.inputDataSetAr = [];
-        this.inputDataScatter = [];
-        this.inputStringAr = [];
-        this.finalJSON = {};
-        this.finalJSONAr = [];
-        this.finalJSONCategory = [];
-        this.propertiesToBeAssigned = [];
-        this.commandStack = [];
-        // 0 - Data, 1 - DataSet, 2 - Scatter, 3 - Bubble
-        this.chartType = -1;
-        this.setChartType(str);
-    }
-
-
-    /**
-     * Reset all the class members.
-     * @memberof DataGenerator
-     */
-    initialize() {
-        this.inputAr = [];
-        this.inputDataSetAr = []
-        this.inputDataScatter = [];
-        this.inputStringAr = [];
-        this.finalJSON = {};
-        this.finalJSONAr = [];
-        this.finalJSONCategory = [];
-        this.propertiesToBeAssigned = [];
-    }
-
-
-    /**
-     * Checks if an element is present in array
-     * @param {array} arr 
-     * @param {string} target 
-     * @returns boolean
-     * @memberof DataGenerator
-     */
-    presentIn(arr, target) {
-        let i;
-        for (i = 0; i < arr.length; i++) {
-            if (arr[i] === target) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    /**
-     * Sets chart type
-     * @param {string} str 
-     * @returns boolean | chartType
-     * @memberof DataGenerator
-     */
-    setChartType(str) {
-        if (str === undefined) {
-            return false;
-        }
-        
-        if (this.presentIn(this.chartTypeZero, str)) {
-            this.chartType = 0;
-        } else if (this.presentIn(this.chartTypeOne, str)) {
-            this.chartType = 1;
-        } else if (this.presentIn(this.chartTypeTwo, str)) {
-            this.chartType = 2;
-        } else if (this.presentIn(this.chartTypeThree, str)) {
-            this.chartType = 3;
-        } else {
-            console.log('Chart type not supported.');
-            return false;
-        }
-        numberGeneratorObj.chartType = str;
-        return this.chartType;
-    }
-
-
-    /**
-     * Stores a property given by user as input.
-     * @param {string} property 
-     * @param {string} value 
-     * @param {string} location 
-     * @memberof DataGenerator
-     */
-    assignProperty(property, value, location) {
-        this.commandStack.push('assignProperty("' + property + '", "' + value + '", "' + location + '")');
-        let ar = [];
-        ar.push(property);
-        ar.push(value);
-        ar.push(location);
-
-        this.propertiesToBeAssigned.push(ar);
-        return ar;
-    }
-
-    /**
-     * Applies/adds all properties given as input by the user.
-     * @memberof DataGenerator
-     */
-    applyProperties() {
-        let i, j, k;
-
-        for (i = 0; i < this.propertiesToBeAssigned.length; i++) {
-            if (this.propertiesToBeAssigned[i][2] === 'data') {
-                // console.log('data');
-                if (this.finalJSON.dataset !== undefined) {
-                    for (j = 0; j < this.finalJSON.dataset.length; j++) {
-                        for (k = 0; k < this.finalJSON.dataset[j].data.length; k++) {
-                            this.finalJSON.dataset[j].data[k][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
-                        }
-                    }
-                } else if (this.finalJSON.data !== undefined) {
-                    for (j = 0; j < this.finalJSON.data.length; j++) {
-                        this.finalJSON.data[j][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
-                    }
-                }
-            } else if (this.propertiesToBeAssigned[i][2] === 'dataset') {
-                // console.log('dataset');
-                if (this.finalJSON.dataset !== undefined) {
-                    for (j = 0; j < this.finalJSON.dataset.length; j++) {
-                        this.finalJSON.dataset[j][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
-                    }
-                }
-            } else if (this.propertiesToBeAssigned[i][2] === 'categories') {
-                // console.log('categories');
-                if (this.finalJSON.categories !== undefined) {
-                    for (j = 0; j < this.finalJSON.categories.length; j++) {
-                        this.finalJSON.categories[j][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
-                    }
-                }
-            } else if (this.propertiesToBeAssigned[i][2] === 'category') {
-                // console.log('category')
-                if (this.finalJSON.categories !== undefined) {
-                    for (j = 0; j < this.finalJSON.categories.length; j++) {
-                        for (k = 0; k < this.finalJSON.categories[j].category.length; k++) {
-                            this.finalJSON.categories[j].category[k][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
-                        }
-                    }
-                }
-            } else if (this.propertiesToBeAssigned[i][2] === 'chart') {
-                // console.log('chart');
-                this.finalJSON.chart[this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
-            } else if (this.propertiesToBeAssigned[i][2] === 'json') {
-                this.finalJSON[this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
-            }
-        }
-    }
-
-
-    /**
-     * Create data array
-     * @param {string} arr 
-     * @returns length of data array
-     * @memberof DataGenerator
-     */
-    parseData(arr) {
-        let i, tempJSONdata = {};
-
-        for (i = 0; i < arr[0].length; i++) {
-            tempJSONdata = {};
-            tempJSONdata['label'] = arr[1][i];
-            tempJSONdata['value'] = arr[0][i] + '';
-            this.finalJSONAr.push(tempJSONdata);
-        }
-
-        return this.finalJSONAr.length;
-    }
-
-    /**
-     * Create a dataset array
-     * @param {array} arr - Data to be processed
-     * @param {boolean} append - whether the current input should be appended to the previous input
-     * @memberof DataGenerator
-     */
-    parseDataset(arr, append) {
-        let i, tempAr = [],
-            tempObj = {},
-            tempCategory = [];
-
-        if (arr[1].length !== 0) {
-            if (this.finalJSONCategory.length > 0) {
-                tempCategory = this.finalJSONCategory.pop()['category'];
-            }
-            // console.log(tempCategory);
-            for (i = 0; i < arr[1].length; i++) {
-                tempObj = {};
-                tempObj['label'] = arr[1][i];
-                tempCategory.push(tempObj);
-            }
-
-            tempObj = {};
-            tempObj['category'] = tempCategory;
-            this.finalJSONCategory.push(tempObj);
-        }
-
-        if (append === true) {
-            if (this.finalJSONAr.length > 0) {
-                tempAr = this.finalJSONAr.pop().data;
-            }
-        }
-
-        // console.log(tempAr);
-        for (i = 0; i < arr[0].length; i++) {
-            tempObj = {};
-            tempObj['value'] = arr[0][i] + '';
-            tempAr.push(tempObj);
-        }
-
-        tempObj = {};
-        tempObj['seriesname'] = 'series';
-        tempObj['data'] = tempAr;
-
-        this.finalJSONAr.push(tempObj);
-    }
-
-    /**
-     * Create dataset for bubble chart
-     * @param {array} arr - Data to be processed. 
-     * @param {boolean} append - Whether to append the current data to the last data.
-     * @memberof DataGenerator
-     */
-    parseDatasetBubble(arr, append) {
-        // console.log(arr);
-        let i, tempAr = [],
-            tempObj = {};
-
-        if (append === true) {
-            if (this.finalJSONAr.length > 0) {
-                tempAr = this.finalJSONAr.pop().data;
-            }
-        }
-
-        for (i = 0; i < arr[0].length; i++) {
-            tempObj = {};
-            tempObj['x'] = arr[0][i][0] + '';
-            tempObj['y'] = arr[0][i][1] + '';
-            tempObj['z'] = arr[0][i][2] + '';
-            tempObj['name'] = 'randomName';
-            tempAr.push(tempObj);
-        }
-
-        tempObj = {};
-        tempObj['seriesname'] = 'Bubbles';
-        tempObj['data'] = tempAr;
-
-        this.finalJSONAr.push(tempObj);
-    }
-
-
-    /**
-     * Creates data for scatter plot[needs modification]
-     * @param {string} arr 
-     * @param {string} append 
-     * @memberof DataGenerator
-     */
-    parseDatasetScatter(arr, append) {
-        let i, tempAr = [],
-            tempObj = {};
-
-        if (append === true) {
-            if (this.finalJSONAr.length > 0) {
-                tempAr = this.finalJSONAr.pop().data;
-            }
-        }
-
-        for (i = 0; i < arr[0].length; i++) {
-            tempObj = {};
-            tempObj['y'] = arr[0][i][1] + '';
-            tempObj['x'] = arr[0][i][0] + '';
-            tempAr.push(tempObj);
-        }
-
-        tempObj = {};
-        tempObj['seriesname'] = 'scatter';
-        tempObj['data'] = tempAr;
-+
-        this.finalJSONAr.push(tempObj);
-    }
-
-
-    /**
-     * Receives array from numbergenerator
-     * @param {array} arr 
-     * @param {boolean} append 
-     * @returns 
-     * @memberof DataGenerator
-     */
-    addArray(arr, append) {
-        // console.log(arr);
-        if (arr === undefined || arr.length === 0) {
-            return 'Array cannot be undefined or empty';
-        }
-        switch (this.chartType) {
-            case 0:
-                this.parseData(arr);
-                break;
-            case 1:
-                this.parseDataset(arr, append);
-                break;
-            case 2:
-                this.parseDatasetScatter(arr, append);
-                break;
-            case 3:
-                this.parseDatasetBubble(arr, append);
-                break;
-            default: // do nothing.
-        }
-    }
-
-
-    /**
-     * 
-     * @param {string} property 
-     * @param {string} value 
-     * @memberof DataGenerator
-     */
-    modifyNumber(property, value) {
-        this.commandStack.push('modifyNumber("' + property + '", "' + value + '")');
-        numberGeneratorObj.modifier(property, value);
-    }
-
-
-    /**
-     * 
-     * 
-     * @param {string} numberType 
-     * @param {number} total 
-     * @param {boolean} append 
-     * @param {string} label 
-     * @memberof DataGenerator
-     */
-    generateNumber(numberType, total, append, label) {
-        this.commandStack.push('generateNumber("' + numberType + '", ' + total + ', ' + append + (label === undefined ? ')' : ', "' + label + '")'));
-        this.addArray(numberGeneratorObj.generate(numberType, total, label), append);
-    }
-
-
-    /**
-     * 
-     * 
-     * @memberof DataGenerator
-     */
-    getCommandStack() {
-        let i;
-        console.log(this.commandStack.length);
-        for (i = 0; i < this.commandStack.length; i++) {
-            console.log(this.commandStack[i]);
-        }
-    }
-
-
-    /**
-     * 
-     * 
-     * @returns 
-     * @memberof DataGenerator
-     */
-    clearCommandStack() {
-        this.commandStack = [];
-        return this.commandStack.length;
-    }
-
-
-    /**
-     * 
-     * 
-     * @returns 
-     * @memberof DataGenerator
-     */
-    getJSON() {
-        this.finalJSON['chart'] = {'theme':'fint'};
-        if (this.chartType === 0) {
-            this.finalJSON['data'] = this.finalJSONAr;
-        } else if (this.chartType === 1) {
-            this.finalJSON['categories'] = this.finalJSONCategory;
-            this.finalJSON['dataset'] = this.finalJSONAr;
-        } else if (this.chartType === 2) {
-            this.finalJSON['dataset'] = this.finalJSONAr;
-        } else if (this.chartType === 3) {
-            this.finalJSON['dataset'] = this.finalJSONAr;
-        }
-        this.applyProperties();
-
-        console.log(JSON.stringify(this.finalJSON, null, 2));
-        // this.initialize();
-        return JSON.stringify(this.finalJSON, null, 2);
-    }
-}
-
-// IMPORTANT : Reset function required cause one stack can affect another stack. Always reset when creating new stack.
-
-window.driver=function(tut){
-    let header = ['<p style="font-size:25px;color:black;"><strong>Getting Started</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Using Trends</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>More about Modifiers &amp; Generators</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Working with Large Data. Zoom Scatter Plot</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Defining Custom Properties</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Using JoCasta with FusionCharts in the browser</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Importing &amp; Exporting Custom Stacks</strong></p></br></br>'];
-    let obj = {
-        'tut1': '<p style="font-size:20px;color:#6f726b;">To generate data, you need to first create an object of type <span style="color:black;">DataGenerator</span>. To do so, run the following line: <span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\') </span>. Here the datagenerator constructor takes in a chart type as string.'+
-        '</br>Once created you can use the object to add modifiers and then generate your data. This particular example concerns with showing how to produce varying results by using a simple property like <span style="color:black;">range</span>.</br></br><span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\');</br>datageneratorObj.modifyNumber(\'range\', \'30, 200\');</br>datageneratorObj.generateNumber(\'integer\', 5, false);</span></br></br>The first line initializes our data generator stack to use column chart properties. The next line uses a function called modifynumber which takes in a property and multiple values of that property. Here we define the range of the data to be generated. By default, the range for both X and Y axis are <span style="color:black;">[-1000000000, 1000000000]</span>.</br>When defining the range property, if only one string is passed as value, then the same range is applied to both X and Y axis by default. Passing another range string will apply the limit for both X and Y seperately(in that order).</br>The last line of code is the generator function which takes into consideration all the properties defined immediately before it and produces an array of values accordingly.</br>The function generateNumber takes in the following parameters, including optional ones. <span style="color:black;">generateNumber(type_of_number[integer, decimal], number_of_data-points, add_to_current_dataset[true, false], label_preset[many presets are provided. Check later tutorial])</span>',
-        
-        'tut2': '<p style="font-size:20px;color:#6f726b;">In order to generate vastly different data values for each test run, the <span style="color:black;">trend</span> property can be used. This property comes with three presets, namely <span style="color:black;">random</span>(set by defaut), <span style="color:black;">linear</span> and <span style="color:black;">exponential.</span></br></br><span style="color:black;">datageneratorObj.modifyNumber(\'trend\', \'exp\');</span></br></br>The above line sets the trend property to exponential.</br>The order of defining properties in the stack does not matter. Both range and trend properties can be stacked upon each other multiple times to give varying results.</br>Following lines of code were used to produce the above data.</br><span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\');'+
-                '</br>datageneratorObj.modifyNumber(\'range\', \'50000, 2000\');'+
-                '</br>datageneratorObj.modifyNumber(\'trend\', \'exp\');'+
-                '</br>datageneratorObj.generateNumber(\'integer\', 8, false , \'generic2\');'+
-                '</br>datageneratorObj.modifyNumber(\'range\', \'2000, 50000\');'+
-                '</br>datageneratorObj.modifyNumber(\'trend\', \'exp\');'+
-                '</br>datageneratorObj.generateNumber(\'integer\', 8, true , \'generic2\');</span></p>',
-    };
-    document.getElementById("lower").innerHTML = header[Number(tut.charAt(tut.length-1))-1]+obj[tut];
-    let chart_obj = {};
-
-    if(tut === 'tut1'){
-        const datageneratorObj = new DataGenerator('column2d');
-        datageneratorObj.modifyNumber('trend', 'random');
-        datageneratorObj.modifyNumber('range', '30, 200');
-        datageneratorObj.generateNumber('integer', 5, false , 'month_short');
-        let d = datageneratorObj.getJSON();
-        chart_obj = {
-            type: 'column2d',
-            renderAt: 'chart',
-            width: '95%',
-            height: '90%',
-            dataFormat: 'json',
-            dataSource: d
-        }
-        document.getElementById("json").innerHTML = d;
-    }
-    else if(tut === 'tut2'){
-        const datageneratorObj = new DataGenerator('column2d');
-        datageneratorObj.modifyNumber('range', '50000, 2000');
-        datageneratorObj.modifyNumber('trend', 'exp');
-        datageneratorObj.generateNumber('integer', 8, false , 'generic2');
-        datageneratorObj.modifyNumber('range', '2000, 50000');
-        datageneratorObj.modifyNumber('trend', 'exp');
-        datageneratorObj.generateNumber('integer', 8, true , 'generic2');
-        let d = datageneratorObj.getJSON();
-        chart_obj = {
-            type: 'column2d',
-            renderAt: 'chart',
-            width: '95%',
-            height: '90%',
-            dataFormat: 'json',
-            dataSource: d
-        }
-        document.getElementById("json").innerHTML = d;
-    }
-
-    // console.log(chart_obj);
-
-    FusionCharts.ready(function(){
-      	let revenueChart = new FusionCharts(chart_obj);
-        revenueChart.render();
-    });
-
-    console.log(chart_obj);
-}
-
-//const datageneratorObj = new DataGenerator('scatter');
-
-// Write your code here
-// numberGeneratorObj.chartType='scatter';
-// datageneratorObj.modifyNumber('range', '30, 200');
-// datageneratorObj.modifyNumber('trend', 'linear');
-// datageneratorObj.generateNumber('integer', 5, false,'generic1');
-// datageneratorObj.getJSON();
-// console.log(datageneratorObj);
-// datageneratorObj.modifyNumber('range', '30, 200');
-/*datageneratorObj.modifyNumber('trend', 'exp');
-datageneratorObj.generateNumber('integer', 5, false,'generic1');
-
-datageneratorObj.getJSON();
-
-// datageneratorObj.modifyNumber('range', '300, 500');
-// datageneratorObj.modifyNumber('trend', 'random');
-// datageneratorObj.assignProperty('abc', 'series', 'chart');
-
-// datageneratorObj.generateNumber('integer', 10, false,'generic2');
-
-// datageneratorObj.getJSON();
-// datageneratorObj.getCommandStack();
-datageneratorObj.generateNumber('integer', 10, false,'generic2');*/
-
-//datageneratorObj.getJSON();
-//datageneratorObj.getCommandStack();
-
-
-/***/ }),
-/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -2592,7 +2081,851 @@ heatmap:m.heatmap,boxandwhisker2d:m.boxandwhisker2d,multiaxisline:m.line,"defaul
 
 
 /***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const StringGenerator = __webpack_require__(5);
+
+/**
+ * 
+ * 
+ * @class NumberGenerator
+ */
+class NumberGenerator {
+
+  /**
+   * Creates an instance of NumberGenerator.
+   * @param {any} chartType 
+   * @memberof NumberGenerator
+   */
+  constructor(chartType) {
+    this.chartType = chartType;
+
+    // Values possible - random, constant, linear, exponential, logarithmic, prime
+    this.trend = {
+      property: 'random',
+      a: 1,
+      b: 1
+    };
+
+    //Defines a range for the generator on the X axis. Values possible - (lb,ub), (,ub), (lb,), (,)
+    this.rangeX = {
+      lowerBound: -1000000000,
+      upperBound: 1000000000
+    };
+
+    //Defines a range for the generator on the Y axis. Values possible - (lb,ub), (,ub), (lb,), (,)
+    this.rangeY = {
+      lowerBound: -1000000000,
+      upperBound: 1000000000
+    };
+  }
+
+  /**
+   * 
+   * 
+   * @param {any} property 
+   * @param {any} value 
+   * @param {any} a 
+   * @param {any} b 
+   * @memberof NumberGenerator
+   */
+  modifier(property, value1, value2) {
+    if (property === 'trend')
+      this.trend.property = value1;
+
+    else if (property === 'range') {
+      if (value1.length > 1) {
+        let val = value1.split(',');
+        if (val[0].length > 0)
+          this.rangeX.lowerBound = Number(val[0].trim());
+        if (val[1].length > 0)
+          this.rangeX.upperBound = Number(val[1].trim());
+      }
+      if(!value2){
+        this.rangeY.lowerBound = this.rangeX.lowerBound;
+        this.rangeY.upperBound = this.rangeX.upperBound;
+      }
+      else{
+        let val = value2.split(',');
+        if (val[0].length > 0)
+          this.rangeY.lowerBound = Number(val[0].trim());
+        if (val[1].length > 0)
+          this.rangeY.upperBound = Number(val[1].trim());
+      }
+    }
+  }
+
+  /**
+   * 
+   * 
+   * @param {any} type 
+   * @param {any} n 
+   * @memberof NumberGenerator
+   */
+  generate(type, n, label) {
+    let spacing = -1,
+      i = 0;
+    if (type === 'integer' || type === 'decimal') {
+      //Adds n unique random numbers to the data this.array
+      if (this.trend.property === 'random') {
+        if (label) {
+          let sg = new StringGenerator(n, label);
+          return [this.random(n, type), sg.generate()];
+        } else
+          return [this.random(n, type), []];
+      } else if (this.trend.property === 'linear') {
+        if (label) {
+          let sg = new StringGenerator(n, label);
+          return [this.linear(n, type), sg.generate()];
+        } else
+          return [this.linear(n, type), []];
+      } else if (this.trend.property === 'exp') {
+        if (label) {
+          let sg = new StringGenerator(n, label);
+          return [this.exponential(n, type), sg.generate()];
+        } else
+          return [this.exponential(n, type), []];
+      }
+    } else if (label) {
+      let sg = new StringGenerator(n, label);
+      return sg.generate();
+    }
+  }
+
+  /**
+   * 
+   * 
+   * @param {any} n 
+   * @memberof NumberGenerator
+   */
+  random(n, type) {
+    let spacing = -1,
+      i = 0,
+      arr = [];
+    while (i < n) {
+      let num;
+      if(type === 'integer')
+        num = Math.floor((Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound)) + this.rangeY.lowerBound);
+      else
+        num = (Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound)) + this.rangeY.lowerBound;
+      if (arr.indexOf(num) > -1)
+        continue;
+      else {
+        if (this.chartType === 'scatter')
+          if(type === 'integer')
+            arr.push([Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound), num]);
+          else
+            arr.push([(Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound) + this.rangeX.lowerBound), num]);
+        else if(this.chartType === 'bubble')
+          if(type === 'integer')
+            arr.push([Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound), num, Math.floor((Math.random() * 100)+50)]);
+          else
+            arr.push([(Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound) + this.rangeX.lowerBound), num, (Math.random() * 100)+50]);
+        else
+          arr.push(num);
+        i++;
+      }
+    }
+    return arr;
+  }
+
+  /**
+   * 
+   * 
+   * @param {any} n 
+   * @memberof NumberGenerator
+   */
+  linear(n, type) {
+    let arr = [];
+    if (this.prevTrend !== this.trend.property)
+      this.counter = 0;
+
+    let x = this.generateX(n, type);
+
+    //Defines Slope
+    this.trend.a = (this.rangeY.upperBound - this.rangeY.lowerBound) / (x[n - 1] - x[0]);
+    //Defines Intercept
+    this.trend.b = (this.rangeY.lowerBound - (this.trend.a * x[0]))
+
+    //generate the y axis values
+    for (let i = 0; i < n; i++)
+      if (this.chartType === 'scatter')
+        if(type === 'integer')
+          arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b)]);
+        else
+          arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b)]);
+      else if(this.chartType === 'bubble')
+        if(type === 'integer')
+          arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b), Math.floor((Math.random() * 100)+50)]);
+        else
+          arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b), (Math.random() * 100)+50]);
+      else
+        if(type === 'integer')
+          arr.push(Math.ceil((this.trend.a * x[i]) + this.trend.b));
+        else
+          arr.push(((this.trend.a * x[i]) + this.trend.b));
+
+    return arr;
+  }
+
+  /**
+   * 
+   * 
+   * @param {any} n 
+   * @memberof NumberGenerator
+   */
+  exponential(n, type) {
+    let arr = [];
+    if (this.prevTrend !== this.trend.property)
+      this.counter = 0;
+
+    let x = this.generateX(n, type);
+
+    //Defines rate of growth in exponential equation
+    this.trend.b = Math.log(this.rangeY.upperBound / this.rangeY.lowerBound) / (x[n - 1] - x[0]);
+    //Define the constant in the exponential equation
+    this.trend.a = this.rangeY.lowerBound / Math.exp(this.trend.b * x[0]);
+
+    //generate the y axis values
+    for (let i = 0; i < n; i++) {
+      if (this.chartType === 'scatter')
+        if(type === 'integer')
+          arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i]))]);
+        else
+          arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i]))]);
+      else if(this.chartType === 'bubble')
+        if(type === 'integer')
+          arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])), Math.floor((Math.random() * 100)+50)]);
+        else
+          arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i])), (Math.random() * 100)+50]);
+      else
+        if(type === 'integer')
+          arr.push(Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])));
+        else
+          arr.push((this.trend.a * Math.exp(this.trend.b * x[i])));
+    }
+
+    return arr;
+  }
+
+  /**
+   * Generates Random numbers on the X axis within a given range
+   * 
+   * @param {any} n 
+   * @returns 
+   * @memberof NumberGenerator
+   */
+  generateX(n, type) {
+    let x = [],
+      i = 0;
+    //Generate random numbers on the x axis within the range
+    while (i < n) {
+      let num;
+      if(type === 'integer')
+        num = Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound);
+      else
+        num = ((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound);
+      if (x.indexOf(num) > -1)
+        continue;
+      else {
+        x.push(num);
+        i++;
+      }
+    }
+    //Sort the x axis numbers numerically. Helps in finding the maximum value of x for both positive and negative range
+    x.sort(function (a, b) {
+      return a - b
+    });
+    return x;
+  }
+}
+
+module.exports = NumberGenerator;
+
+//1. TODO: Add ellipse, parabola, quadratic, rectangular hyperbola, constant
+
+// let X = new NumberGenerator("bubble");
+
+// X.modifier('range', '30, 100');
+// X.modifier('trend', 'exp');
+// console.log(X.generate('integer', 10));
+// // //console.log(c[0]);
+// // //console.log(c[1]);
+
+// // //console.log(X);
+
+// // X.modifier('range', '100, 170', '100, 30');
+// // X.modifier('trend', 'linear');
+// // let d = X.generate('decimal', 10);
+// // console.log(d[0]);
+// // console.log(d[1]);
+
+// // //console.log(X);
+
+// // /*X.modifier('range', '300, 100');
+// // X.modifier('trend', 'linear');
+// // let d = X.generate('integer', 5, 'generic1');
+// // console.log(d[0]);
+// // console.log(d[1]);  
+
+// // X.modifier('range', '300, 100');
+// // X.modifier('trend', 'linear');
+// let e = X.generate('none', 5, 'generic1');
+// console.log(e);*/
+
+
+/***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const FusionCharts = __webpack_require__(1);
+const DataGenerator = __webpack_require__(4);
+const NumberGenerator = __webpack_require__(2);
+const ConstantValue = __webpack_require__(0);
+
+__webpack_require__(6)(FusionCharts);
+__webpack_require__(7)(FusionCharts);
+
+window.driver=function(tut){
+    
+    let header = ['<p style="font-size:25px;color:black;"><strong>Getting Started</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Using Trends</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>More about Modifiers &amp; Generators</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Working with Large Data. Zoom Scatter Plot</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Defining Custom Properties</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Using JoCasta with FusionCharts in the browser</strong></p></br></br>', '<p style="font-size:25px;color:black;"><strong>Importing &amp; Exporting Custom Stacks</strong></p></br></br>'];
+    let obj = {
+        'tut1': '<p style="font-size:20px;color:#6f726b;">To generate data, you need to first create an object of type <span style="color:black;">DataGenerator</span>. To do so, run the following line: <span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\') </span>. Here the datagenerator constructor takes in a chart type as string.'+
+        '</br>Once created you can use the object to add modifiers and then generate your data. This particular example concerns with showing how to produce varying results by using a simple property like <span style="color:black;">range</span>.</br></br><span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\');</br>datageneratorObj.modifyNumber(\'range\', \'30, 200\');</br>datageneratorObj.generateNumber(\'integer\', 5, false);</span></br></br>The first line initializes our data generator stack to use column chart properties. The next line uses a function called modifynumber which takes in a property and multiple values of that property. Here we define the range of the data to be generated. By default, the range for both X and Y axis are <span style="color:black;">[-1000000000, 1000000000]</span>.</br>When defining the range property, if only one string is passed as value, then the same range is applied to both X and Y axis by default. Passing another range string will apply the limit for both X and Y seperately(in that order).</br>The last line of code is the generator function which takes into consideration all the properties defined immediately before it and produces an array of values accordingly.</br>The function generateNumber takes in the following parameters, including optional ones. <span style="color:black;">generateNumber(type_of_number[integer, decimal], number_of_data-points, add_to_current_dataset[true, false], label_preset[many presets are provided. Check later tutorial])</span>',
+        
+        'tut2': '<p style="font-size:20px;color:#6f726b;">In order to generate vastly different data values for each test run, the <span style="color:black;">trend</span> property can be used. This property comes with three presets, namely <span style="color:black;">random</span>(set by defaut), <span style="color:black;">linear</span> and <span style="color:black;">exponential.</span></br></br><span style="color:black;">datageneratorObj.modifyNumber(\'trend\', \'exp\');</span></br></br>The above line sets the trend property to exponential.</br>The order of defining properties in the stack does not matter. Both range and trend properties can be stacked upon each other multiple times to give varying results.</br>Following lines of code were used to produce the above data.</br><span style="color:black;">const datageneratorObj = new DataGenerator(\'column2d\');'+
+                '</br>datageneratorObj.modifyNumber(\'range\', \'50000, 2000\');'+
+                '</br>datageneratorObj.modifyNumber(\'trend\', \'exp\');'+
+                '</br>datageneratorObj.generateNumber(\'integer\', 8, false , \'generic2\');'+
+                '</br>datageneratorObj.modifyNumber(\'range\', \'2000, 50000\');'+
+                '</br>datageneratorObj.modifyNumber(\'trend\', \'exp\');'+
+                '</br>datageneratorObj.generateNumber(\'integer\', 8, true , \'generic2\');</span></p>',
+    };
+    document.getElementById("lower").innerHTML = header[Number(tut.charAt(tut.length-1))-1]+obj[tut];
+    let chart_obj = {};
+
+    if(tut === 'tut1'){
+        const datageneratorObj = new DataGenerator('column2d');
+        datageneratorObj.modifyNumber('trend', 'random');
+        datageneratorObj.modifyNumber('range', '30, 200');
+        datageneratorObj.generateNumber('integer', 5, false , 'month_short');
+        let d = datageneratorObj.getJSON();
+        chart_obj = {
+            type: 'column2d',
+            renderAt: 'chart',
+            width: '95%',
+            height: '90%',
+            dataFormat: 'json',
+            dataSource: d
+        }
+        document.getElementById("json").innerHTML = d;
+    }
+    else if(tut === 'tut2'){
+        const datageneratorObj = new DataGenerator('column2d');
+        datageneratorObj.modifyNumber('range', '50000, 2000');
+        datageneratorObj.modifyNumber('trend', 'exp');
+        datageneratorObj.generateNumber('integer', 8, false , 'generic2');
+        datageneratorObj.modifyNumber('range', '2000, 50000');
+        datageneratorObj.modifyNumber('trend', 'exp');
+        datageneratorObj.generateNumber('integer', 8, true , 'generic2');
+        let d = datageneratorObj.getJSON();
+        chart_obj = {
+            type: 'column2d',
+            renderAt: 'chart',
+            width: '95%',
+            height: '90%',
+            dataFormat: 'json',
+            dataSource: d
+        }
+        document.getElementById("json").innerHTML = d;
+    }
+
+    FusionCharts.ready(function(){
+      	let revenueChart = new FusionCharts(chart_obj);
+        revenueChart.render();
+    });
+
+    console.log(chart_obj);
+}
+
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+const FusionCharts = __webpack_require__(1);
+const NumberGenerator = __webpack_require__(2);
+const ConstantValue = __webpack_require__(0);
+
+const numberGeneratorObj = new NumberGenerator();
+
+
+/**
+ * Class that creates a json for fusioncharts testing
+ * @class DataGenerator
+ * @extends {ConstantValue}
+ */
+class DataGenerator extends ConstantValue {
+
+    /**
+     * Creates an instance of DataGenerator.
+     * @param {string} str 
+     * @memberof DataGenerator
+     */
+    constructor(str) {
+        super();
+        this.inputAr = [];
+        this.inputDataSetAr = [];
+        this.inputDataScatter = [];
+        this.inputStringAr = [];
+        this.finalJSON = {};
+        this.finalJSONAr = [];
+        this.finalJSONCategory = [];
+        this.propertiesToBeAssigned = [];
+        this.commandStack = [];
+        // 0 - Data, 1 - DataSet, 2 - Scatter, 3 - Bubble
+        this.chartType = -1;
+        this.setChartType(str);
+    }
+
+
+    /**
+     * Reset all the class members.
+     * @memberof DataGenerator
+     */
+    initialize() {
+        this.inputAr = [];
+        this.inputDataSetAr = []
+        this.inputDataScatter = [];
+        this.inputStringAr = [];
+        this.finalJSON = {};
+        this.finalJSONAr = [];
+        this.finalJSONCategory = [];
+        this.propertiesToBeAssigned = [];
+    }
+
+
+    /**
+     * Checks if an element is present in array
+     * @param {array} arr 
+     * @param {string} target 
+     * @returns boolean
+     * @memberof DataGenerator
+     */
+    presentIn(arr, target) {
+        let i;
+        for (i = 0; i < arr.length; i++) {
+            if (arr[i] === target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Sets chart type
+     * @param {string} str 
+     * @returns boolean | chartType
+     * @memberof DataGenerator
+     */
+    setChartType(str) {
+        if (str === undefined) {
+            return false;
+        }
+        
+        if (this.presentIn(this.chartTypeZero, str)) {
+            this.chartType = 0;
+        } else if (this.presentIn(this.chartTypeOne, str)) {
+            this.chartType = 1;
+        } else if (this.presentIn(this.chartTypeTwo, str)) {
+            this.chartType = 2;
+        } else if (this.presentIn(this.chartTypeThree, str)) {
+            this.chartType = 3;
+        } else {
+            console.log('Chart type not supported.');
+            return false;
+        }
+        numberGeneratorObj.chartType = str;
+        return this.chartType;
+    }
+
+
+    /**
+     * Stores a property given by user as input.
+     * @param {string} property 
+     * @param {string} value 
+     * @param {string} location 
+     * @memberof DataGenerator
+     */
+    assignProperty(property, value, location) {
+        this.commandStack.push('assignProperty("' + property + '", "' + value + '", "' + location + '")');
+        let ar = [];
+        ar.push(property);
+        ar.push(value);
+        ar.push(location);
+
+        this.propertiesToBeAssigned.push(ar);
+        return ar;
+    }
+
+    /**
+     * Applies/adds all properties given as input by the user.
+     * @memberof DataGenerator
+     */
+    applyProperties() {
+        let i, j, k;
+
+        for (i = 0; i < this.propertiesToBeAssigned.length; i++) {
+            if (this.propertiesToBeAssigned[i][2] === 'data') {
+                // console.log('data');
+                if (this.finalJSON.dataset !== undefined) {
+                    for (j = 0; j < this.finalJSON.dataset.length; j++) {
+                        for (k = 0; k < this.finalJSON.dataset[j].data.length; k++) {
+                            this.finalJSON.dataset[j].data[k][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                        }
+                    }
+                } else if (this.finalJSON.data !== undefined) {
+                    for (j = 0; j < this.finalJSON.data.length; j++) {
+                        this.finalJSON.data[j][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                    }
+                }
+            } else if (this.propertiesToBeAssigned[i][2] === 'dataset') {
+                // console.log('dataset');
+                if (this.finalJSON.dataset !== undefined) {
+                    for (j = 0; j < this.finalJSON.dataset.length; j++) {
+                        this.finalJSON.dataset[j][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                    }
+                }
+            } else if (this.propertiesToBeAssigned[i][2] === 'categories') {
+                // console.log('categories');
+                if (this.finalJSON.categories !== undefined) {
+                    for (j = 0; j < this.finalJSON.categories.length; j++) {
+                        this.finalJSON.categories[j][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                    }
+                }
+            } else if (this.propertiesToBeAssigned[i][2] === 'category') {
+                // console.log('category')
+                if (this.finalJSON.categories !== undefined) {
+                    for (j = 0; j < this.finalJSON.categories.length; j++) {
+                        for (k = 0; k < this.finalJSON.categories[j].category.length; k++) {
+                            this.finalJSON.categories[j].category[k][this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+                        }
+                    }
+                }
+            } else if (this.propertiesToBeAssigned[i][2] === 'chart') {
+                // console.log('chart');
+                this.finalJSON.chart[this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+            } else if (this.propertiesToBeAssigned[i][2] === 'json') {
+                this.finalJSON[this.propertiesToBeAssigned[i][0]] = this.propertiesToBeAssigned[i][1];
+            }
+        }
+    }
+
+
+    /**
+     * Create data array
+     * @param {string} arr 
+     * @returns length of data array
+     * @memberof DataGenerator
+     */
+    parseData(arr) {
+        let i, tempJSONdata = {};
+
+        for (i = 0; i < arr[0].length; i++) {
+            tempJSONdata = {};
+            tempJSONdata['label'] = arr[1][i];
+            tempJSONdata['value'] = arr[0][i] + '';
+            this.finalJSONAr.push(tempJSONdata);
+        }
+
+        return this.finalJSONAr.length;
+    }
+
+    /**
+     * Create a dataset array
+     * @param {array} arr - Data to be processed
+     * @param {boolean} append - whether the current input should be appended to the previous input
+     * @memberof DataGenerator
+     */
+    parseDataset(arr, append) {
+        let i, tempAr = [],
+            tempObj = {},
+            tempCategory = [];
+
+        if (arr[1].length !== 0) {
+            if (this.finalJSONCategory.length > 0) {
+                tempCategory = this.finalJSONCategory.pop()['category'];
+            }
+            // console.log(tempCategory);
+            for (i = 0; i < arr[1].length; i++) {
+                tempObj = {};
+                tempObj['label'] = arr[1][i];
+                tempCategory.push(tempObj);
+            }
+
+            tempObj = {};
+            tempObj['category'] = tempCategory;
+            this.finalJSONCategory.push(tempObj);
+        }
+
+        if (append === true) {
+            if (this.finalJSONAr.length > 0) {
+                tempAr = this.finalJSONAr.pop().data;
+            }
+        }
+
+        // console.log(tempAr);
+        for (i = 0; i < arr[0].length; i++) {
+            tempObj = {};
+            tempObj['value'] = arr[0][i] + '';
+            tempAr.push(tempObj);
+        }
+
+        tempObj = {};
+        tempObj['seriesname'] = 'series';
+        tempObj['data'] = tempAr;
+
+        this.finalJSONAr.push(tempObj);
+    }
+
+    /**
+     * Create dataset for bubble chart
+     * @param {array} arr - Data to be processed. 
+     * @param {boolean} append - Whether to append the current data to the last data.
+     * @memberof DataGenerator
+     */
+    parseDatasetBubble(arr, append) {
+        // console.log(arr);
+        let i, tempAr = [],
+            tempObj = {};
+
+        if (append === true) {
+            if (this.finalJSONAr.length > 0) {
+                tempAr = this.finalJSONAr.pop().data;
+            }
+        }
+
+        for (i = 0; i < arr[0].length; i++) {
+            tempObj = {};
+            tempObj['x'] = arr[0][i][0] + '';
+            tempObj['y'] = arr[0][i][1] + '';
+            tempObj['z'] = arr[0][i][2] + '';
+            tempObj['name'] = arr[1][i];
+            tempAr.push(tempObj);
+        }
+
+        tempObj = {};
+        tempObj['seriesname'] = 'Bubbles';
+        tempObj['data'] = tempAr;
+
+        this.finalJSONAr.push(tempObj);
+    }
+
+
+    /**
+     * Creates data for scatter plot[needs modification]
+     * @param {string} arr 
+     * @param {string} append 
+     * @memberof DataGenerator
+     */
+    parseDatasetScatter(arr, append) {
+        let i, tempAr = [],
+            tempObj = {};
+
+        if (append === true) {
+            if (this.finalJSONAr.length > 0) {
+                tempAr = this.finalJSONAr.pop().data;
+            }
+        }
+
+        for (i = 0; i < arr[0].length; i++) {
+            tempObj = {};
+            tempObj['y'] = arr[0][i][1] + '';
+            tempObj['x'] = arr[0][i][0] + '';
+            tempAr.push(tempObj);
+        }
+
+        tempObj = {};
+        tempObj['seriesname'] = 'scatter';
+        tempObj['data'] = tempAr;
++
+        this.finalJSONAr.push(tempObj);
+    }
+
+
+    /**
+     * Receives array from numbergenerator
+     * @param {array} arr 
+     * @param {boolean} append 
+     * @returns 
+     * @memberof DataGenerator
+     */
+    addArray(arr, append) {
+        // console.log(arr);
+        if (arr === undefined || arr.length === 0) {
+            return 'Array cannot be undefined or empty';
+        }
+        switch (this.chartType) {
+            case 0:
+                this.parseData(arr);
+                break;
+            case 1:
+                this.parseDataset(arr, append);
+                break;
+            case 2:
+                this.parseDatasetScatter(arr, append);
+                break;
+            case 3:
+                this.parseDatasetBubble(arr, append);
+                break;
+            default: // do nothing.
+        }
+    }
+
+
+    /**
+     * 
+     * @param {string} property 
+     * @param {string} value 
+     * @memberof DataGenerator
+     */
+    modifyNumber(property, value) {
+        this.commandStack.push('modifyNumber("' + property + '", "' + value + '")');
+        numberGeneratorObj.modifier(property, value);
+    }
+
+
+    /**
+     * 
+     * 
+     * @param {string} numberType 
+     * @param {number} total 
+     * @param {boolean} append 
+     * @param {string} label 
+     * @memberof DataGenerator
+     */
+    generateNumber(numberType, total, append, label) {
+        this.commandStack.push('generateNumber("' + numberType + '", ' + total + ', ' + append + (label === undefined ? ')' : ', "' + label + '")'));
+        this.addArray(numberGeneratorObj.generate(numberType, total, label), append);
+    }
+
+
+    /**
+     * 
+     * 
+     * @memberof DataGenerator
+     */
+    getCommandStack() {
+        let i;
+        console.log(this.commandStack.length);
+        for (i = 0; i < this.commandStack.length; i++) {
+            console.log(this.commandStack[i]);
+        }
+    }
+
+
+    /**
+     * 
+     * 
+     * @returns 
+     * @memberof DataGenerator
+     */
+    clearCommandStack() {
+        this.commandStack = [];
+        return this.commandStack.length;
+    }
+
+
+    /**
+     * 
+     * 
+     * @returns 
+     * @memberof DataGenerator
+     */
+    getJSON() {
+        this.finalJSON['chart'] = {'theme':'fint'};
+        if (this.chartType === 0) {
+            this.finalJSON['data'] = this.finalJSONAr;
+        } else if (this.chartType === 1) {
+            this.finalJSON['categories'] = this.finalJSONCategory;
+            this.finalJSON['dataset'] = this.finalJSONAr;
+        } else if (this.chartType === 2) {
+            this.finalJSON['dataset'] = this.finalJSONAr;
+        } else if (this.chartType === 3) {
+            this.finalJSON['dataset'] = this.finalJSONAr;
+        }
+        this.applyProperties();
+
+        console.log(JSON.stringify(this.finalJSON, null, 2));
+        let str = JSON.stringify(this.finalJSON, null, 2);
+        this.initialize();
+        return str;
+    }
+}
+
+module.exports = DataGenerator;
+const datageneratorObj = new DataGenerator('bubble');
+
+// Write your code here
+
+datageneratorObj.modifyNumber('range', '30, 200');
+datageneratorObj.modifyNumber('trend', 'linear');
+datageneratorObj.generateNumber('integer', 5, false,'generic1');
+datageneratorObj.getJSON();
+
+// datageneratorObj.modifyNumber('range', '30, 200');
+datageneratorObj.modifyNumber('trend', 'exp');
+datageneratorObj.generateNumber('integer', 5, true,'generic1');
+
+datageneratorObj.getJSON();
+
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+const ConstantValue=__webpack_require__(0);
+
+class StringGenerator extends ConstantValue{
+    constructor(n, label){
+        super();
+        this.n = n;
+        this.label = label;
+    }
+
+    generate(){
+        let arrLabel = [], counter = 0;
+        for(let i=0;i<this.n;i++){
+            if(this.label === 'generic1' || this.label === 'generic2')
+                arrLabel.push(this[this.label]+' '+i);
+            else if(this.label.includes('random')){
+                let str = "";
+                for(let i=0;i<this[this.label];i++)
+                    str+= this['alphanumeric'][Math.floor(Math.random() * (this['alphanumeric'].length-1))];
+                // console.log('SG '+str);
+                arrLabel.push(str);
+            }
+            else if(this.label === 'month_short' || this.label === 'month_long'){
+                if(i%12 == 0 && i !== 0)
+                    counter++;
+                if(counter > 0)
+                    arrLabel.push(this[this.label][i%12]+" "+counter);
+                else
+                    arrLabel.push(this[this.label][i%12]);
+            }
+        }
+        return arrLabel;
+    }
+}
+
+module.exports = StringGenerator;
+
+/***/ }),
+/* 6 */
 /***/ (function(module, exports) {
 
 /*
@@ -2856,7 +3189,7 @@ k,u,k,f,g,t,a-.5,t,a,c+b+.5,m,t,h,t,l,f,l,u,h,r,q,r,q,u,q,f,p,f,p,u,q,u,q,r,"Z"]
 
 
 /***/ }),
-/* 4 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /*
@@ -2878,341 +3211,6 @@ bgAlpha:"100",borderColor:"#666666",bgHoverAlpha:"20"}]}},hlineargauge:{chart:{p
 verticalLineDashLen:"1",verticalLineDashGap:"1",verticalLineThickness:"1",verticalLineColor:"#000000",category:[{}]}],vtrendlines:[{line:[{alpha:"0"}]}]},scatter:{chart:{use3dlighting:"0",showYAxisLine:"1",yAxisLineThickness:"1",yAxisLineColor:"#999999",showAlternateHGridColor:"0",showAlternateVGridColor:"0"},categories:[{verticalLineDashed:"1",verticalLineDashLen:"1",verticalLineDashGap:"1",verticalLineThickness:"1",verticalLineColor:"#000000",category:[{}]}],vtrendlines:[{line:[{alpha:"0"}]}]},
 boxandwhisker2d:{chart:{valueBgColor:"#ffffff",valueBgAlpha:"90",valueBorderPadding:"-2",valueBorderRadius:"2"}},thermometer:{chart:{gaugeFillColor:"#0075c2"}},cylinder:{chart:{cylFillColor:"#0075c2"}},sparkline:{chart:{linecolor:"#0075c2"}},sparkcolumn:{chart:{plotFillColor:"#0075c2"}},sparkwinloss:{chart:{winColor:"#0075c2",lossColor:"#1aaf5d",drawColor:"#f2c500",scoreLessColor:"#f45b00"}},hbullet:{chart:{plotFillColor:"#0075c2",targetColor:"#1aaf5d"}},vbullet:{chart:{plotFillColor:"#0075c2",targetColor:"#1aaf5d"}}}})});
 
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const StringGenerator = __webpack_require__(6);
-
-/**
- * 
- * 
- * @class NumberGenerator
- */
-class NumberGenerator {
-
-  /**
-   * Creates an instance of NumberGenerator.
-   * @param {any} chartType 
-   * @memberof NumberGenerator
-   */
-  constructor(chartType) {
-    this.chartType = chartType;
-
-    // Values possible - random, constant, linear, exponential, logarithmic, prime
-    this.trend = {
-      property: 'random',
-      a: 1,
-      b: 1
-    };
-
-    //Defines a range for the generator on the X axis. Values possible - (lb,ub), (,ub), (lb,), (,)
-    this.rangeX = {
-      lowerBound: -1000000000,
-      upperBound: 1000000000
-    };
-
-    //Defines a range for the generator on the Y axis. Values possible - (lb,ub), (,ub), (lb,), (,)
-    this.rangeY = {
-      lowerBound: -1000000000,
-      upperBound: 1000000000
-    };
-  }
-
-  /**
-   * 
-   * 
-   * @param {any} property 
-   * @param {any} value 
-   * @param {any} a 
-   * @param {any} b 
-   * @memberof NumberGenerator
-   */
-  modifier(property, value1, value2) {
-    if (property === 'trend')
-      this.trend.property = value1;
-
-    else if (property === 'range') {
-      if (value1.length > 1) {
-        let val = value1.split(',');
-        if (val[0].length > 0)
-          this.rangeX.lowerBound = Number(val[0].trim());
-        if (val[1].length > 0)
-          this.rangeX.upperBound = Number(val[1].trim());
-      }
-      if(!value2){
-        this.rangeY.lowerBound = this.rangeX.lowerBound;
-        this.rangeY.upperBound = this.rangeX.upperBound;
-      }
-      else{
-        let val = value2.split(',');
-        if (val[0].length > 0)
-          this.rangeY.lowerBound = Number(val[0].trim());
-        if (val[1].length > 0)
-          this.rangeY.upperBound = Number(val[1].trim());
-      }
-    }
-  }
-
-  /**
-   * 
-   * 
-   * @param {any} type 
-   * @param {any} n 
-   * @memberof NumberGenerator
-   */
-  generate(type, n, label) {
-    let spacing = -1,
-      i = 0;
-    if (type === 'integer' || type === 'decimal') {
-      //Adds n unique random numbers to the data this.array
-      if (this.trend.property === 'random') {
-        if (label) {
-          let sg = new StringGenerator(n, label);
-          return [this.random(n, type), sg.generate()];
-        } else
-          return [this.random(n, type), []];
-      } else if (this.trend.property === 'linear') {
-        if (label) {
-          let sg = new StringGenerator(n, label);
-          return [this.linear(n, type), sg.generate()];
-        } else
-          return [this.linear(n, type), []];
-      } else if (this.trend.property === 'exp') {
-        if (label) {
-          let sg = new StringGenerator(n, label);
-          return [this.exponential(n, type), sg.generate()];
-        } else
-          return [this.exponential(n, type), []];
-      }
-    } else if (label) {
-      let sg = new StringGenerator(n, label);
-      return sg.generate();
-    }
-  }
-
-  /**
-   * 
-   * 
-   * @param {any} n 
-   * @memberof NumberGenerator
-   */
-  random(n, type) {
-    let spacing = -1,
-      i = 0,
-      arr = [];
-    while (i < n) {
-      let num;
-      if(type === 'integer')
-        num = Math.floor((Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound)) + this.rangeY.lowerBound);
-      else
-        num = (Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound)) + this.rangeY.lowerBound;
-      if (arr.indexOf(num) > -1)
-        continue;
-      else {
-        if (type === 'scatter')
-          if(type === 'integer')
-            arr.push([Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound), num]);
-          else
-            arr.push([(Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound) + this.rangeX.lowerBound), num]);
-        else if(type === 'bubble')
-          if(type === 'integer')
-            arr.push([Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound), num, Math.floor((Math.random() * 100)+50)]);
-          else
-            arr.push([(Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound) + this.rangeX.lowerBound), num, (Math.random() * 100)+50]);
-        else
-          arr.push(num);
-        i++;
-      }
-    }
-    return arr;
-  }
-
-  /**
-   * 
-   * 
-   * @param {any} n 
-   * @memberof NumberGenerator
-   */
-  linear(n, type) {
-    let arr = [];
-    if (this.prevTrend !== this.trend.property)
-      this.counter = 0;
-
-    let x = this.generateX(n, type);
-
-    //Defines Slope
-    this.trend.a = (this.rangeY.upperBound - this.rangeY.lowerBound) / (x[n - 1] - x[0]);
-    //Defines Intercept
-    this.trend.b = (this.rangeY.lowerBound - (this.trend.a * x[0]))
-
-    //generate the y axis values
-    for (let i = 0; i < n; i++)
-      if (this.chartType === 'scatter')
-        if(type === 'integer')
-          arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b)]);
-        else
-          arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b)]);
-      else if(type === 'bubble')
-        if(type === 'integer')
-          arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b), Math.floor((Math.random() * 100)+50)]);
-        else
-          arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b), (Math.random() * 100)+50]);
-      else
-        if(type === 'integer')
-          arr.push(Math.ceil((this.trend.a * x[i]) + this.trend.b));
-        else
-          arr.push(((this.trend.a * x[i]) + this.trend.b));
-
-    return arr;
-  }
-
-  /**
-   * 
-   * 
-   * @param {any} n 
-   * @memberof NumberGenerator
-   */
-  exponential(n, type) {
-    let arr = [];
-    if (this.prevTrend !== this.trend.property)
-      this.counter = 0;
-
-    let x = this.generateX(n, type);
-
-    //Defines rate of growth in exponential equation
-    this.trend.b = Math.log(this.rangeY.upperBound / this.rangeY.lowerBound) / (x[n - 1] - x[0]);
-    //Define the constant in the exponential equation
-    this.trend.a = this.rangeY.lowerBound / Math.exp(this.trend.b * x[0]);
-
-    //generate the y axis values
-    for (let i = 0; i < n; i++) {
-      if (type === 'scatter')
-        if(type === 'integer')
-          arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i]))]);
-        else
-          arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i]))]);
-      else if(type === 'bubble')
-        if(type === 'integer')
-          arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])), Math.floor((Math.random() * 100)+50)]);
-        else
-          arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i])), (Math.random() * 100)+50]);
-      else
-        if(type === 'integer')
-          arr.push(Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])));
-        else
-          arr.push((this.trend.a * Math.exp(this.trend.b * x[i])));
-    }
-
-    return arr;
-  }
-
-  /**
-   * Generates Random numbers on the X axis within a given range
-   * 
-   * @param {any} n 
-   * @returns 
-   * @memberof NumberGenerator
-   */
-  generateX(n, type) {
-    let x = [],
-      i = 0;
-    //Generate random numbers on the x axis within the range
-    while (i < n) {
-      let num;
-      if(type === 'integer')
-        num = Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound);
-      else
-        num = ((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound);
-      if (x.indexOf(num) > -1)
-        continue;
-      else {
-        x.push(num);
-        i++;
-      }
-    }
-    //Sort the x axis numbers numerically. Helps in finding the maximum value of x for both positive and negative range
-    x.sort(function (a, b) {
-      return a - b
-    });
-    return x;
-  }
-}
-
-module.exports = NumberGenerator;
-
-//1. TODO: Add ellipse, parabola, quadratic, rectangular hyperbola, constant
-
-// let X = new NumberGenerator("scatter");
-
-// X.modifier('range', '30, 100');
-// X.modifier('trend', 'linear');
-// console.log(X.generate('integer', 10));
-// // //console.log(c[0]);
-// // //console.log(c[1]);
-
-// // //console.log(X);
-
-// // X.modifier('range', '100, 170', '100, 30');
-// // X.modifier('trend', 'linear');
-// // let d = X.generate('decimal', 10);
-// // console.log(d[0]);
-// // console.log(d[1]);
-
-// // //console.log(X);
-
-// // /*X.modifier('range', '300, 100');
-// // X.modifier('trend', 'linear');
-// // let d = X.generate('integer', 5, 'generic1');
-// // console.log(d[0]);
-// // console.log(d[1]);  
-
-// // X.modifier('range', '300, 100');
-// // X.modifier('trend', 'linear');
-// let e = X.generate('none', 5, 'generic1');
-// console.log(e);*/
-
-
-/***/ }),
-/* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const ConstantValue=__webpack_require__(0);
-
-class StringGenerator extends ConstantValue{
-    constructor(n, label){
-        super();
-        this.n = n;
-        this.label = label;
-    }
-
-    generate(){
-        let arrLabel = [], counter = 0;
-        for(let i=0;i<this.n;i++){
-            if(this.label === 'generic1' || this.label === 'generic2')
-                arrLabel.push(this[this.label]+' '+i);
-            else if(this.label.includes('random')){
-                let str = "";
-                for(let i=0;i<this[this.label];i++)
-                    str+= this['alphanumeric'][Math.floor(Math.random() * (this['alphanumeric'].length-1))];
-                // console.log('SG '+str);
-                arrLabel.push(str);
-            }
-            else if(this.label === 'month_short' || this.label === 'month_long'){
-                if(i%12 == 0 && i !== 0)
-                    counter++;
-                if(counter > 0)
-                    arrLabel.push(this[this.label][i%12]+" "+counter);
-                else
-                    arrLabel.push(this[this.label][i%12]);
-            }
-        }
-        return arrLabel;
-    }
-}
-
-module.exports = StringGenerator;
 
 /***/ })
 /******/ ]);

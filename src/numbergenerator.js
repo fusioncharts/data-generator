@@ -259,11 +259,11 @@ module.exports = NumberGenerator;
 
 //1. TODO: Add ellipse, parabola, quadratic, rectangular hyperbola, constant
 
-let X = new NumberGenerator("bubble");
+// let X = new NumberGenerator("bubble");
 
-X.modifier('range', '30, 100');
-X.modifier('trend', 'exp');
-console.log(X.generate('integer', 10));
+// X.modifier('range', '30, 100');
+// X.modifier('trend', 'exp');
+// console.log(X.generate('integer', 10));
 // // //console.log(c[0]);
 // // //console.log(c[1]);
 
