@@ -91,15 +91,10 @@ module.exports=ConstantValue;
 /***/ (function(module, exports, __webpack_require__) {
 
 
-<<<<<<< HEAD
-
-const NumberGenerator = __webpack_require__(2);
-=======
 const FusionCharts = __webpack_require__(2);
 __webpack_require__(3)(FusionCharts);
 __webpack_require__(4)(FusionCharts);
 const NumberGenerator = __webpack_require__(5);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 const ConstantValue = __webpack_require__(0);
 
 const numberGeneratorObj = new NumberGenerator();
@@ -111,7 +106,7 @@ const numberGeneratorObj = new NumberGenerator();
  * @extends {ConstantValue}
  */
 class DataGenerator extends ConstantValue {
-    
+
     /**
      * Creates an instance of DataGenerator.
      * @param {string} str 
@@ -133,7 +128,7 @@ class DataGenerator extends ConstantValue {
         this.setChartType(str);
     }
 
-    
+
     /**
      * Reset all the class members.
      * @memberof DataGenerator
@@ -167,7 +162,7 @@ class DataGenerator extends ConstantValue {
         return false;
     }
 
-    
+
     /**
      * Sets chart type
      * @param {string} str 
@@ -178,11 +173,7 @@ class DataGenerator extends ConstantValue {
         if (str === undefined) {
             return false;
         }
-<<<<<<< HEAD
-
-=======
         
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         if (this.presentIn(this.chartTypeZero, str)) {
             this.chartType = 0;
         } else if (this.presentIn(this.chartTypeOne, str)) {
@@ -195,15 +186,11 @@ class DataGenerator extends ConstantValue {
             console.log('Chart type not supported.');
             return false;
         }
-<<<<<<< HEAD
-        numberGeneratorObj.chartType = this.chartType;
-=======
         numberGeneratorObj.chartType = str;
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         return this.chartType;
     }
 
-    
+
     /**
      * Stores a property given by user as input.
      * @param {string} property 
@@ -212,7 +199,7 @@ class DataGenerator extends ConstantValue {
      * @memberof DataGenerator
      */
     assignProperty(property, value, location) {
-        this.commandStack.push('assignProperty("'+property+'", "'+value+'", "'+location+'")');
+        this.commandStack.push('assignProperty("' + property + '", "' + value + '", "' + location + '")');
         let ar = [];
         ar.push(property);
         ar.push(value);
@@ -349,6 +336,7 @@ class DataGenerator extends ConstantValue {
      * @memberof DataGenerator
      */
     parseDatasetBubble(arr, append) {
+        // console.log(arr);
         let i, tempAr = [],
             tempObj = {};
 
@@ -358,11 +346,11 @@ class DataGenerator extends ConstantValue {
             }
         }
 
-        for (i = 0; i < arr.length; i++) {
+        for (i = 0; i < arr[0].length; i++) {
             tempObj = {};
-            tempObj['x'] = arr[i][0] + '';
-            tempObj['y'] = arr[i][1] + '';
-            tempObj['z'] = arr[i][2] + '';
+            tempObj['x'] = arr[0][i][0] + '';
+            tempObj['y'] = arr[0][i][1] + '';
+            tempObj['z'] = arr[0][i][2] + '';
             tempObj['name'] = 'randomName';
             tempAr.push(tempObj);
         }
@@ -374,12 +362,14 @@ class DataGenerator extends ConstantValue {
         this.finalJSONAr.push(tempObj);
     }
 
+
+    /**
+     * Creates data for scatter plot[needs modification]
+     * @param {string} arr 
+     * @param {string} append 
+     * @memberof DataGenerator
+     */
     parseDatasetScatter(arr, append) {
-<<<<<<< HEAD
-=======
-        console.log('SSSS');
-        console.log( arr);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         let i, tempAr = [],
             tempObj = {};
 
@@ -389,24 +379,28 @@ class DataGenerator extends ConstantValue {
             }
         }
 
-        for (i = 0; i < arr.length; i++) {
+        for (i = 0; i < arr[0].length; i++) {
             tempObj = {};
-            tempObj['y'] = arr[i][0] + '';
-            tempObj['x'] = arr[i][1] + '';
+            tempObj['y'] = arr[0][i][1] + '';
+            tempObj['x'] = arr[0][i][0] + '';
             tempAr.push(tempObj);
         }
 
         tempObj = {};
         tempObj['seriesname'] = 'scatter';
         tempObj['data'] = tempAr;
-<<<<<<< HEAD
-
-=======
 +
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         this.finalJSONAr.push(tempObj);
     }
 
+
+    /**
+     * Receives array from numbergenerator
+     * @param {array} arr 
+     * @param {boolean} append 
+     * @returns 
+     * @memberof DataGenerator
+     */
     addArray(arr, append) {
         // console.log(arr);
         if (arr === undefined || arr.length === 0) {
@@ -429,51 +423,68 @@ class DataGenerator extends ConstantValue {
         }
     }
 
-    createNewPropertyOfNumber(property, _value) {
-<<<<<<< HEAD
-        Object.defineProperty(NumberGenerator.prototype, property, {
-=======
-        Object.defineProperty(NumberGenerator.p+rototype, property, {
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
-            value: _value
-        });
-    }
 
+    /**
+     * 
+     * @param {string} property 
+     * @param {string} value 
+     * @memberof DataGenerator
+     */
     modifyNumber(property, value) {
-        this.commandStack.push('modifyNumber("'+property+'", "'+value+'")');
-<<<<<<< HEAD
-=======
-        console.log(numberGeneratorObj.chartType);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
+        this.commandStack.push('modifyNumber("' + property + '", "' + value + '")');
         numberGeneratorObj.modifier(property, value);
     }
+
+
+    /**
+     * 
+     * 
+     * @param {string} numberType 
+     * @param {number} total 
+     * @param {boolean} append 
+     * @param {string} label 
+     * @memberof DataGenerator
+     */
     generateNumber(numberType, total, append, label) {
-        this.commandStack.push('generateNumber("'+numberType+'", '+total+', '+append+ (label===undefined?')':', "'+label+'")'));
+        this.commandStack.push('generateNumber("' + numberType + '", ' + total + ', ' + append + (label === undefined ? ')' : ', "' + label + '")'));
         this.addArray(numberGeneratorObj.generate(numberType, total, label), append);
     }
 
-    getCommandStack(){
+
+    /**
+     * 
+     * 
+     * @memberof DataGenerator
+     */
+    getCommandStack() {
         let i;
-<<<<<<< HEAD
         console.log(this.commandStack.length);
-=======
-        // console.log(this.commandStack.length);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
-        for(i=0;i<this.commandStack.length;i++){
+        for (i = 0; i < this.commandStack.length; i++) {
             console.log(this.commandStack[i]);
         }
     }
-    clearCommandStack(){
-        this.commandStack=[];
+
+
+    /**
+     * 
+     * 
+     * @returns 
+     * @memberof DataGenerator
+     */
+    clearCommandStack() {
+        this.commandStack = [];
         return this.commandStack.length;
     }
 
+
+    /**
+     * 
+     * 
+     * @returns 
+     * @memberof DataGenerator
+     */
     getJSON() {
-<<<<<<< HEAD
-        this.finalJSON['chart'] = {};
-=======
         this.finalJSON['chart'] = {'theme':'fint'};
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         if (this.chartType === 0) {
             this.finalJSON['data'] = this.finalJSONAr;
         } else if (this.chartType === 1) {
@@ -487,28 +498,11 @@ class DataGenerator extends ConstantValue {
         this.applyProperties();
 
         console.log(JSON.stringify(this.finalJSON, null, 2));
-<<<<<<< HEAD
-        this.initialize();
-=======
         // this.initialize();
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         return JSON.stringify(this.finalJSON, null, 2);
     }
 }
 
-<<<<<<< HEAD
-const datageneratorObj = new DataGenerator('column2d');
-
-// Write your code here
-
-
-datageneratorObj.modifyNumber('range', '30, 200');
-datageneratorObj.modifyNumber('trend', 'linear');
-datageneratorObj.generateNumber('integer', 5, false,'generic1');
-
-// datageneratorObj.modifyNumber('range', '30, 200');
-datageneratorObj.modifyNumber('trend', 'exp');
-=======
 // IMPORTANT : Reset function required cause one stack can affect another stack. Always reset when creating new stack.
 
 window.driver=function(tut){
@@ -585,44 +579,23 @@ window.driver=function(tut){
 // console.log(datageneratorObj);
 // datageneratorObj.modifyNumber('range', '30, 200');
 /*datageneratorObj.modifyNumber('trend', 'exp');
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 datageneratorObj.generateNumber('integer', 5, false,'generic1');
 
-// datageneratorObj.getJSON();
+datageneratorObj.getJSON();
 
-datageneratorObj.modifyNumber('range', '300, 500');
-datageneratorObj.modifyNumber('trend', 'random');
+// datageneratorObj.modifyNumber('range', '300, 500');
+// datageneratorObj.modifyNumber('trend', 'random');
 // datageneratorObj.assignProperty('abc', 'series', 'chart');
 
-<<<<<<< HEAD
-datageneratorObj.generateNumber('integer', 10, false,'generic2');
+// datageneratorObj.generateNumber('integer', 10, false,'generic2');
 
-datageneratorObj.getJSON();
+// datageneratorObj.getJSON();
 // datageneratorObj.getCommandStack();
-
-let fusionObject = {};
-fusionObject['type']='column2d';
-fusionObject['renderAt']='chartContainer';
-fusionObject['width']='500';
-fusionObject['height']='300';
-fusionObject['dataFormat']='json';
-fusionObject['datasource']=datageneratorObj.finalJSON;
-
-FusionCharts.ready(function(){
-    var revenueChart = new FusionCharts(fusionObject);
-    revenueChart.render();
-})
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-const StringGenerator = __webpack_require__(3);
-=======
 datageneratorObj.generateNumber('integer', 10, false,'generic2');*/
 
 //datageneratorObj.getJSON();
 //datageneratorObj.getCommandStack();
+
 
 /***/ }),
 /* 2 */
@@ -2911,7 +2884,6 @@ boxandwhisker2d:{chart:{valueBgColor:"#ffffff",valueBgAlpha:"90",valueBorderPadd
 /***/ (function(module, exports, __webpack_require__) {
 
 const StringGenerator = __webpack_require__(6);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 
 /**
  * 
@@ -3039,23 +3011,16 @@ class NumberGenerator {
       if (arr.indexOf(num) > -1)
         continue;
       else {
-<<<<<<< HEAD
-        if (this.chartType === 'scatter')
-=======
         if (type === 'scatter')
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
           if(type === 'integer')
             arr.push([Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound), num]);
           else
             arr.push([(Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound) + this.rangeX.lowerBound), num]);
-<<<<<<< HEAD
-=======
         else if(type === 'bubble')
           if(type === 'integer')
             arr.push([Math.floor((Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound)) + this.rangeX.lowerBound), num, Math.floor((Math.random() * 100)+50)]);
           else
             arr.push([(Math.random() * (this.rangeX.upperBound - this.rangeX.lowerBound) + this.rangeX.lowerBound), num, (Math.random() * 100)+50]);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         else
           arr.push(num);
         i++;
@@ -3089,14 +3054,11 @@ class NumberGenerator {
           arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b)]);
         else
           arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b)]);
-<<<<<<< HEAD
-=======
       else if(type === 'bubble')
         if(type === 'integer')
           arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b), Math.floor((Math.random() * 100)+50)]);
         else
           arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b), (Math.random() * 100)+50]);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
       else
         if(type === 'integer')
           arr.push(Math.ceil((this.trend.a * x[i]) + this.trend.b));
@@ -3126,23 +3088,16 @@ class NumberGenerator {
 
     //generate the y axis values
     for (let i = 0; i < n; i++) {
-<<<<<<< HEAD
-      if (this.chartType === 'scatter')
-=======
       if (type === 'scatter')
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         if(type === 'integer')
           arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i]))]);
         else
           arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i]))]);
-<<<<<<< HEAD
-=======
       else if(type === 'bubble')
         if(type === 'integer')
           arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])), Math.floor((Math.random() * 100)+50)]);
         else
           arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i])), (Math.random() * 100)+50]);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
       else
         if(type === 'integer')
           arr.push(Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])));
@@ -3189,20 +3144,11 @@ module.exports = NumberGenerator;
 
 //1. TODO: Add ellipse, parabola, quadratic, rectangular hyperbola, constant
 
-<<<<<<< HEAD
-// // let X = new NumberGenerator("scatter");
-
-// // X.modifier('range', '30, 100');
-// // X.modifier('trend', 'linear');
-// // let c = X.generate('integer', 10);
-// // console.log(c);
-=======
 // let X = new NumberGenerator("scatter");
 
 // X.modifier('range', '30, 100');
 // X.modifier('trend', 'linear');
 // console.log(X.generate('integer', 10));
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 // // //console.log(c[0]);
 // // //console.log(c[1]);
 
@@ -3229,11 +3175,7 @@ module.exports = NumberGenerator;
 
 
 /***/ }),
-<<<<<<< HEAD
-/* 3 */
-=======
 /* 6 */
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 /***/ (function(module, exports, __webpack_require__) {
 
 const ConstantValue=__webpack_require__(0);

@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-=======
 
 const FusionCharts = require('../fusioncharts/js/fusioncharts.js');
 require("../fusioncharts/js/fusioncharts.charts.js")(FusionCharts);
 require("../fusioncharts/js/themes/fusioncharts.theme.fint.js")(FusionCharts);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 const NumberGenerator = require('./numbergenerator.js');
 const ConstantValue = require('./constant.config.js');
 
@@ -281,12 +278,6 @@ class DataGenerator extends ConstantValue {
      * @memberof DataGenerator
      */
     parseDatasetScatter(arr, append) {
-<<<<<<< HEAD
-        // console.log(arr);
-=======
-        console.log('SSSS');
-        console.log( arr);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         let i, tempAr = [],
             tempObj = {};
 
@@ -340,14 +331,6 @@ class DataGenerator extends ConstantValue {
         }
     }
 
-<<<<<<< HEAD
-=======
-    createNewPropertyOfNumber(property, _value) {
-        Object.defineProperty(NumberGenerator.p+rototype, property, {
-            value: _value
-        });
-    }
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 
     /**
      * 
@@ -356,12 +339,7 @@ class DataGenerator extends ConstantValue {
      * @memberof DataGenerator
      */
     modifyNumber(property, value) {
-<<<<<<< HEAD
         this.commandStack.push('modifyNumber("' + property + '", "' + value + '")');
-=======
-        this.commandStack.push('modifyNumber("'+property+'", "'+value+'")');
-        console.log(numberGeneratorObj.chartType);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
         numberGeneratorObj.modifier(property, value);
     }
 
@@ -388,13 +366,8 @@ class DataGenerator extends ConstantValue {
      */
     getCommandStack() {
         let i;
-<<<<<<< HEAD
         console.log(this.commandStack.length);
         for (i = 0; i < this.commandStack.length; i++) {
-=======
-        // console.log(this.commandStack.length);
-        for(i=0;i<this.commandStack.length;i++){
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
             console.log(this.commandStack[i]);
         }
     }
@@ -438,9 +411,6 @@ class DataGenerator extends ConstantValue {
     }
 }
 
-<<<<<<< HEAD
-const datageneratorObj = new DataGenerator('scatter');
-=======
 // IMPORTANT : Reset function required cause one stack can affect another stack. Always reset when creating new stack.
 
 window.driver=function(tut){
@@ -497,7 +467,6 @@ window.driver=function(tut){
     }
 
     // console.log(chart_obj);
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 
     FusionCharts.ready(function(){
       	let revenueChart = new FusionCharts(chart_obj);
@@ -507,15 +476,6 @@ window.driver=function(tut){
     console.log(chart_obj);
 }
 
-<<<<<<< HEAD
-datageneratorObj.modifyNumber('range', '30, 200');
-datageneratorObj.modifyNumber('trend', 'linear');
-datageneratorObj.generateNumber('integer', 5, false, 'generic1');
-
-datageneratorObj.modifyNumber('range', '30, 200');
-datageneratorObj.modifyNumber('trend', 'exp');
-datageneratorObj.generateNumber('integer', 5, true, 'generic1');
-=======
 //const datageneratorObj = new DataGenerator('scatter');
 
 // Write your code here
@@ -528,7 +488,6 @@ datageneratorObj.generateNumber('integer', 5, true, 'generic1');
 // datageneratorObj.modifyNumber('range', '30, 200');
 /*datageneratorObj.modifyNumber('trend', 'exp');
 datageneratorObj.generateNumber('integer', 5, false,'generic1');
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
 
 datageneratorObj.getJSON();
 
@@ -536,14 +495,11 @@ datageneratorObj.getJSON();
 // datageneratorObj.modifyNumber('trend', 'random');
 // datageneratorObj.assignProperty('abc', 'series', 'chart');
 
-<<<<<<< HEAD
 // datageneratorObj.generateNumber('integer', 10, false,'generic2');
 
 // datageneratorObj.getJSON();
 // datageneratorObj.getCommandStack();
-=======
 datageneratorObj.generateNumber('integer', 10, false,'generic2');*/
 
 //datageneratorObj.getJSON();
 //datageneratorObj.getCommandStack();
->>>>>>> fe12d94b2461318003e756c81aca09617cf183c8
