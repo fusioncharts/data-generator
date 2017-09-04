@@ -1,0 +1,213 @@
+<html>
+
+<head>
+    <title>JoCasta Tutorial Series</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #f4f2f3;
+        }
+
+        #logo {
+            width: 25%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            background-color: #0172ac;
+            text-align: center;
+        }
+
+        #JC {
+            font-size: 60px;
+            color: #fffafd;
+        }
+
+        #JoCasta {
+            font-size: 30px;
+            color: #c5dce7;
+            position: relative;
+            top: -14px;
+        }
+
+        #tut-series {
+            font-size: 12px;
+            color: #67accd;
+            position: relative;
+            top: -3px;
+        }
+
+        #menu-left {
+            float: left;
+            width: 25%;
+            background-color: #23282e;
+            height: 100%;
+            text-align: center;
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        ul {
+            text-decoration: none;
+            list-style: none;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul li {
+            cursor: pointer;
+            font-size: 20px;
+            padding-top: 10px;
+            vertical-align: center;
+        }
+
+        ul li div {
+            height: 50px;
+            line-height: 50px;
+            color: #b1b1b1;
+        }
+
+        ul li div:hover {
+            background-color: #1a7bac;
+            color: white;
+        }
+
+        #upper {
+            width: 73.3%;
+            height: 340px;
+            position: relative;
+            top: -160px;
+            left: 26%;
+        }
+        #chart{
+            position: absolute;
+            background-color: #ffffff;
+            width: 70%;
+            height: 100%;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        #json{
+            position: absolute;
+            background-color: #ffffff;
+            width: 29%;
+            height: 100%;
+            /* top: -340px; */
+            left: 71%;
+            border-radius: 5px;
+            overflow: auto;
+        }
+
+        #lower {
+            position: relative;
+            width: 73.3%;
+            height: 340px;
+            top: -150px; 
+            left: 1%;
+            background-color: #ffffff;
+            overflow: auto;
+            border-radius: 5px;
+            line-height: 25px;
+        }
+        #lower p{
+            position: absolute;
+            float: left;
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-bottom: 20px;
+        }
+        /*#desc{
+            width: 80%;
+            background-color: #ffffff;
+            height: 100%;
+            position: relative;
+            display: block;
+            left: -32%;
+            top: 10px;
+            border-radius: 5px;
+            overflow: auto;
+            line-height: 25px;
+        }
+        #desc p{
+            position: absolute;
+            float: left;
+            padding-left: 15px;
+            padding-right: 15px;
+        }
+        #json{
+            display: block;
+            width: 48.7%;
+            background-color: #ffffff;
+            height: 100%;
+            position: relative;
+            left: 17%;
+            top: -330px;
+            border-radius: 5px;
+            overflow: auto;
+        }*/
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div id="logo">
+            <div id="JC">JC</div>
+            <div id="JoCasta">JoCasta</div>
+            <div id="tut-series">A tutorial series to get you up and running with JoCasta</div>
+        </div>
+        <div id="menu-left">
+            <ul>
+                <li>
+                    <div id="tut1" onClick="driver('tut1')">Tutorial 1 : Getting Started</div>
+                </li>
+                <li>
+                    <div id="tut2" onClick="driver('tut2')">Tutorial 2 : Using Trends</div>
+                </li>
+                <li>
+                    <div id="tut3" onClick="driver('tut3')">Tutorial 3 : Mods &amp; Gens</div>
+                </li>
+                <li>
+                    <div id="tut4" onClick="driver('tut4')">Tutorial 4 : Large Data</div>
+                </li>
+                <li>
+                    <div id="tut5" onClick="driver('tut5')">Tutorial 5 : Custom Properties</div>
+                </li>
+                <li>
+                    <div id="tut6" onClick="driver('tut6')">Tutorial 6 : Using JC with FC</div>
+                </li>
+                <li>
+                    <div id="tut7" onClick="driver('tut7')">Tutorial 7 : Save &amp; Load Stack</div>
+                </li>
+            </ul>
+        </div>
+        <div id="upper">
+            <div id="chart">
+            </div>
+            <div id="json">
+            </div>
+        </div>
+        <div id="lower">
+            <!-- <div id="desc"> -->
+                <p style="font-size:25px;color:black;"><strong>Tutorial</strong></p></br></br>
+            <!-- </div> -->
+            <!-- <div id="json"> -->
+            <!-- </div> -->
+        </div>
+    </div>
+    <script src="../build/main.bundle.js"></script>
+    <!-- <script>
+        function driver(tut) {
+            
+        }
+    </script> -->
+</body>
+
+</html>
