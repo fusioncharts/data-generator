@@ -24,7 +24,11 @@ class DataGenerator extends ConstantValue {
         this.inputDataSetAr = [];
         this.inputDataScatter = [];
         this.inputStringAr = [];
-        this.finalJSON = {};
+        this.finalJSON = {
+            'chart': {
+                'theme': 'fint'
+            }
+        };
         this.finalJSONAr = [];
         this.finalJSONCategory = [];
         this.propertiesToBeAssigned = [];
@@ -44,7 +48,11 @@ class DataGenerator extends ConstantValue {
         this.inputDataSetAr = []
         this.inputDataScatter = [];
         this.inputStringAr = [];
-        this.finalJSON = {};
+        this.finalJSON = {
+            'chart': {
+                'theme':'fint'
+            }
+        };
         this.finalJSONAr = [];
         this.finalJSONCategory = [];
         this.propertiesToBeAssigned = [];
@@ -146,6 +154,44 @@ class DataGenerator extends ConstantValue {
         }
     }
 
+
+    removePropertiesHelper(ar,obj) {
+        let i, j;
+        for(i in obj) {
+            if(i === ar[2]){
+                if(obj[ar[0]] !== undefined){
+                    delete obj[ar[0]];
+                }
+            }
+
+            if(obj[i].constructor === Object){
+                this.removePropertiesHelper(obj[i]);
+            }else if(obj[i].constructor === Array){
+                for(j in obj[i]){
+                    if(obj[i][j].constructor === Object){
+                        this.removePropertiesHelper(obj[i][j]);
+                    }
+                }
+            }
+        }
+    }
+
+    removeProperties() {
+        let i, ar = [];
+        
+        if(arguments.length===3){
+            ar.push(arguments[0]);ar.push(arguments[1]);ar.push(arguments[2]);
+        }else if(arguments.length===2){
+            ar.push(arguments[0]);ar.push('');ar.push(arguments[2]);
+        }
+        
+        for(i=0;i<this.propertiesToBeAssigned.length;i++){
+            if(this.propertiesToBeAssigned[i] === ar){
+                this.removePropertiesHelper(ar,this.obj);
+                this.propertiesToBeAssigned.splice(i,1);
+            }
+        }
+    }
 
     /**
      * Create data array
@@ -273,7 +319,7 @@ class DataGenerator extends ConstantValue {
         tempObj = {};
         tempObj['seriesname'] = 'scatter';
         tempObj['data'] = tempAr;
-+
+
         this.finalJSONAr.push(tempObj);
     }
 
@@ -286,7 +332,7 @@ class DataGenerator extends ConstantValue {
      * @memberof DataGenerator
      */
     addArray(arr, append) {
-        // console.log(arr);
+        console.log(arr);
         if (arr === undefined || arr.length === 0) {
             return 'Array cannot be undefined or empty';
         }
@@ -368,7 +414,10 @@ class DataGenerator extends ConstantValue {
      * @memberof DataGenerator
      */
     getJSON(reset) {
-        this.finalJSON['chart'] = {'theme':'fint'};
+        if(reset===undefined){
+            reset=false;
+        }
+
         if (this.chartType === 0) {
             this.finalJSON['data'] = this.finalJSONAr;
         } else if (this.chartType === 1) {
@@ -391,20 +440,22 @@ class DataGenerator extends ConstantValue {
 }
 
 module.exports = DataGenerator;
-const datageneratorObj = new DataGenerator('column2d');
+const datageneratorObj = new DataGenerator('mscolumn2d');
 
 // Write your code here
 
 datageneratorObj.modifyNumber('range', '30, 200');
-datageneratorObj.modifyNumber('trend', 'linear');
-datageneratorObj.generateNumber('integer', 5, false,'generic1');
+datageneratorObj.modifyNumber('trend', 'exp');
+datageneratorObj.generateNumber('integer', 1, false,'generic1');
 // datageneratorObj.getJSON(false);
 datageneratorObj.assignProperty('abc','xyz','label');
-datageneratorObj.getJSON(true);
+// datageneratorObj.getJSON();
+datageneratorObj.removeProperties('abc','label');
+// datageneratorObj.getJSON();
 
 // datageneratorObj.modifyNumber('range', '30, 200');
-datageneratorObj.modifyNumber('trend', 'exp');
-datageneratorObj.generateNumber('decimal', 5, true,'generic1');
+// datageneratorObj.modifyNumber('trend', 'exp');
+// datageneratorObj.generateNumber('decimal', 5, true,'generic1');
 
-datageneratorObj.getJSON(true);
+// datageneratorObj.getJSON(true);
 

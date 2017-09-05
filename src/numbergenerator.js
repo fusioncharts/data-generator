@@ -155,30 +155,49 @@ class NumberGenerator {
     if (this.prevTrend !== this.trend.property)
       this.counter = 0;
 
-    let x = this.generateX(n, type);
-
-    //Defines Slope
-    this.trend.a = (this.rangeY.upperBound - this.rangeY.lowerBound) / (x[n - 1] - x[0]);
-    //Defines Intercept
-    this.trend.b = (this.rangeY.lowerBound - (this.trend.a * x[0]))
-
-    //generate the y axis values
-    for (let i = 0; i < n; i++)
+    if(n === 1){
       if (this.chartType === 'scatter')
         if(type === 'integer')
-          arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b)]);
+          arr.push([x[0], Math.ceil(Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound)]);
         else
-          arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b)]);
+          arr.push([x[0], (Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound)]);
       else if(this.chartType === 'bubble')
         if(type === 'integer')
-          arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b), Math.floor((Math.random() * 100)+50)]);
+          arr.push([x[0], Math.ceil(Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound), Math.floor((Math.random() * 100)+50)]);
         else
-          arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b), (Math.random() * 100)+50]);
+          arr.push([x[0], (Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound), (Math.random() * 100)+50]);
       else
         if(type === 'integer')
-          arr.push(Math.ceil((this.trend.a * x[i]) + this.trend.b));
+          arr.push(Math.ceil(Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound));
         else
-          arr.push(((this.trend.a * x[i]) + this.trend.b));
+          arr.push((Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound));
+    }
+    else if(n > 1){
+      let x = this.generateX(n, type);
+
+      //Defines Slope
+      this.trend.a = (this.rangeY.upperBound - this.rangeY.lowerBound) / (x[n - 1] - x[0]);
+      //Defines Intercept
+      this.trend.b = (this.rangeY.lowerBound - (this.trend.a * x[0]))
+
+      //generate the y axis values
+      for (let i = 0; i < n; i++)
+        if (this.chartType === 'scatter')
+          if(type === 'integer')
+            arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b)]);
+          else
+            arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b)]);
+        else if(this.chartType === 'bubble')
+          if(type === 'integer')
+            arr.push([x[i], Math.ceil((this.trend.a * x[i]) + this.trend.b), Math.floor((Math.random() * 100)+50)]);
+          else
+            arr.push([x[i], ((this.trend.a * x[i]) + this.trend.b), (Math.random() * 100)+50]);
+        else
+          if(type === 'integer')
+            arr.push(Math.ceil((this.trend.a * x[i]) + this.trend.b));
+          else
+            arr.push(((this.trend.a * x[i]) + this.trend.b));
+    }
 
     return arr;
   }
@@ -194,30 +213,49 @@ class NumberGenerator {
     if (this.prevTrend !== this.trend.property)
       this.counter = 0;
 
-    let x = this.generateX(n, type);
-
-    //Defines rate of growth in exponential equation
-    this.trend.b = Math.log(this.rangeY.upperBound / this.rangeY.lowerBound) / (x[n - 1] - x[0]);
-    //Define the constant in the exponential equation
-    this.trend.a = this.rangeY.lowerBound / Math.exp(this.trend.b * x[0]);
-
-    //generate the y axis values
-    for (let i = 0; i < n; i++) {
+    if(n === 1){
       if (this.chartType === 'scatter')
         if(type === 'integer')
-          arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i]))]);
+          arr.push([x[0], Math.ceil(Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound)]);
         else
-          arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i]))]);
+          arr.push([x[0], (Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound)]);
       else if(this.chartType === 'bubble')
         if(type === 'integer')
-          arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])), Math.floor((Math.random() * 100)+50)]);
+          arr.push([x[0], Math.ceil(Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound), Math.floor((Math.random() * 100)+50)]);
         else
-          arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i])), (Math.random() * 100)+50]);
+          arr.push([x[0], (Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound), (Math.random() * 100)+50]);
       else
         if(type === 'integer')
-          arr.push(Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])));
+          arr.push(Math.ceil(Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound));
         else
-          arr.push((this.trend.a * Math.exp(this.trend.b * x[i])));
+          arr.push((Math.random() * (this.rangeY.upperBound - this.rangeY.lowerBound) + this.rangeY.lowerBound));
+    }
+    else if(n > 1){
+      let x = this.generateX(n, type);
+
+      //Defines rate of growth in exponential equation
+      this.trend.b = Math.log(this.rangeY.upperBound / this.rangeY.lowerBound) / (x[n - 1] - x[0]);
+      //Define the constant in the exponential equation
+      this.trend.a = this.rangeY.lowerBound / Math.exp(this.trend.b * x[0]);
+
+      //generate the y axis values
+      for (let i = 0; i < n; i++) {
+        if (this.chartType === 'scatter')
+          if(type === 'integer')
+            arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i]))]);
+          else
+            arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i]))]);
+        else if(this.chartType === 'bubble')
+          if(type === 'integer')
+            arr.push([x[i], Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])), Math.floor((Math.random() * 100)+50)]);
+          else
+            arr.push([x[i], (this.trend.a * Math.exp(this.trend.b * x[i])), (Math.random() * 100)+50]);
+        else
+          if(type === 'integer')
+            arr.push(Math.floor(this.trend.a * Math.exp(this.trend.b * x[i])));
+          else
+            arr.push((this.trend.a * Math.exp(this.trend.b * x[i])));
+      }
     }
 
     return arr;
